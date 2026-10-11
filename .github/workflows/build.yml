@@ -1,0 +1,35 @@
+name: iOS Build
+
+# The template's own CI: the shared CI
+# (ci.yml) run on the sample app, at this
+# commit. An app's build.yml is the same
+# but pins a version (see README.md).
+on:
+  push:
+    branches: [main]
+  pull_request:
+    # `labeled`: adding the record-snapshots
+    # label records every snapshot again.
+    types:
+    - opened
+    - synchronize
+    - reopened
+    - labeled
+  workflow_dispatch:
+
+concurrency:
+  group: ios-build-${{ github.ref }}
+  cancel-in-progress: true
+
+# What the shared CI may do: commit
+# recorded snapshot images to a PR branch
+# and start CI again on it.
+permissions:
+  contents: write
+  actions: write
+  pull-requests: write
+
+jobs:
+  ci:
+    name: CI
+    uses: ./.github/workflows/ci.yml

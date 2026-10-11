@@ -5,11 +5,11 @@ Each version of the template. Apps pin one
 an app must change to update.
 
 ## v1.0.0
-- First version, taken from One Hundo's
-  setup: the shared CI (`ci.yml`), the
-  TestFlight upload (`testflight.yml`),
-  the scripts, the SwiftLint rules and
-  version, and the Base package (`BaseUI`,
+- First version: the shared CI
+  (`ci.yml`), the TestFlight upload
+  (`testflight.yml`), the scripts, the
+  SwiftLint rules and version, and the
+  Base package (`BaseUI`,
   `BaseTesting`, `BaseSnapshots`).
 - `scripts/new-app.sh` starts a new app
   from the sample.

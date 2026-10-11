@@ -15,7 +15,7 @@
 # <name>UITests beside it.
 # The shards run in parallel, each on its own
 # runner with one simulator (the 3-core
-# runner can't run two: tried in #21, the
+# runner can't run two: when tried, the
 # second timed out). A failed test prints its
 # step-by-step record (taps, waits, what it
 # found).

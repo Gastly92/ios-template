@@ -235,16 +235,20 @@ its scheme and source folder, with
   live in `<App>Tests/__Snapshots__/`. CI
   records missing ones and commits them to
   the PR branch (pull before pushing
-  again). A bot push needs approval to
-  merge, so look at the images, then push
-  the next real change (or the owner
-  approves). Deleting images re-records
-  them too. After an intended visual
-  change, add the `record-snapshots` label
-  to the PR to record all of them again; a
-  failed comparison uploads
-  `snapshot-diffs`. Re-record after Xcode,
-  iOS or snapshot library updates.
+  again), starts CI on it, and comments
+  with the run's link. GitHub also holds a
+  duplicate run for the bot's push
+  ("Approve and run"; `action_required`
+  in `actions_list`): it needs no
+  approval. Look at the images, then
+  push the next real change. Deleting
+  images re-records them too. After an
+  intended visual change, add the
+  `record-snapshots` label to the PR to
+  record all of them again; a failed
+  comparison uploads `snapshot-diffs`.
+  Re-record after Xcode, iOS or snapshot
+  library updates.
 - CI's `Workflows & scripts` job runs
   actionlint on `.github/workflows/` and
   ShellCheck on every `*.sh`. The session

@@ -185,12 +185,12 @@ its scheme and source folder, with
   initializer shows its private property
   defaults as untested; give it an
   explicit `init`.
-- No Thread Sanitizer: Swift 6 mode
-  already makes data races compile errors,
-  and it slowed every test by 25–30%. The
-  `unchecked_concurrency` lint rule bans
-  the ways around that check
-  (`@unchecked Sendable`,
+- Swift 6 mode makes data races compile
+  errors, so tests run without Thread
+  Sanitizer (it would slow them by about a
+  quarter). The `unchecked_concurrency`
+  lint rule bans the ways around that
+  check (`@unchecked Sendable`,
   `nonisolated(unsafe)`,
   `@preconcurrency`).
 - UI tests launch the app with

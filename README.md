@@ -45,7 +45,8 @@ the same for Claude Code sessions.
 
 ## Starting a new app
 
-See [docs/NEW-APP.md](docs/NEW-APP.md):
-create a repo, ask Claude to set it up from
-here, then (when you want it on your phone)
-the one-time TestFlight setup.
+Tap **Use this template** on GitHub, start
+a Claude Code session on the new repo, and
+say "Help me set this repo up using the
+template". Details, TestFlight setup
+included: [docs/NEW-APP.md](docs/NEW-APP.md).

@@ -6,6 +6,12 @@ rules, TestFlight upload and the Base Swift
 package), used by each app as a versioned
 dependency. README.md explains the layout.
 
+If this repo isn't gastly92/ios-template
+itself but a copy made with "Use this
+template", it isn't set up yet: follow
+"Setting up a new repo (for Claude)" in
+docs/NEW-APP.md first.
+
 The rules every app follows are in
 RULES.md; they apply here too (the session
 start hook prints them). This file adds

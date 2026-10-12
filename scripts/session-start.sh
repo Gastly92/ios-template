@@ -25,4 +25,24 @@ echo "export PATH=\"$venv/bin:\$PATH\"" \
 (nohup "$here/swiftlint.sh" --prepare \
   >/dev/null 2>&1 &)
 
+# A repo made with "Use this template" and
+# not set up yet: tell Claude what to do.
+origin=$(git remote get-url origin \
+  2>/dev/null || true)
+if [ -f Sample/SampleApp.swift ] \
+  && ! grep -qi '/ios-template' <<<"$origin"
+then
+  cat <<'MD'
+# This repo needs setting up
+
+It was made from ios-template ("Use this
+template") and is still the template's
+sample. Follow "Setting up a new repo
+(for Claude)" in docs/NEW-APP.md as soon
+as the owner asks for anything, before
+other work.
+
+MD
+fi
+
 cat "$here/../RULES.md"

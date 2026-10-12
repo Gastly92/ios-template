@@ -6,20 +6,31 @@
 # QuestLog): its scheme, source folder and
 # bundle ID (com.gastly92.questlog). The app
 # pins the template at `version` (default:
-# the newest tag here). Run it from the
-# template's checkout; then fill in the
-# app's CLAUDE.md and docs, and push.
+# the newest tag on GitHub). Run it from a
+# checkout of the template (or a copy made
+# with "Use this template"; setup-app.sh
+# turns such a copy into the app).
 set -euo pipefail
 
 name="${1:?app name, e.g. QuestLog}"
 dest="${2:?folder of the new app repo}"
 here="$(cd "$(dirname "$0")/.." && pwd)"
-version="${3:-$(git -C "$here" describe \
-  --tags --abbrev=0)}"
-lower=$(tr '[:upper:]' '[:lower:]' \
-  <<<"$name")
 repo=gastly92/ios-template
 shared="$repo/.github/workflows"
+newest() {
+  git ls-remote -q --tags --refs \
+    "https://github.com/$repo" 'v*' \
+    | sed 's|.*refs/tags/||' \
+    | sort -V | tail -n 1
+}
+version="${3:-}"
+version="${version:-$(newest)}"
+if [ -z "$version" ]; then
+  echo "No template version tag yet." >&2
+  exit 1
+fi
+lower=$(tr '[:upper:]' '[:lower:]' \
+  <<<"$name")
 
 if ! [[ "$name" =~ ^[A-Z][A-Za-z0-9]*$ ]]
 then

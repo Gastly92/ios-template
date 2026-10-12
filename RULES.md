@@ -16,8 +16,8 @@ its scheme and source folder, with
 - Explain anything they must do by hand as
   short numbered steps for iPhone Safari.
   App Store Connect's mobile layout can
-  hide buttons; "Request Desktop Website"
-  or Safari's Find on page helps.
+  hide buttons; Safari's Find on page
+  helps.
 
 ## The template
 - Each app pins a template version (a tag,

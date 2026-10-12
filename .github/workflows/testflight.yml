@@ -44,7 +44,8 @@ jobs:
         if [ -n "$missing" ]; then
           echo "::error::Missing" \
             "repository secrets:$missing" \
-            "(see the template's RULES.md)"
+            "(see the template's" \
+            "docs/NEW-APP.md)"
           exit 1
         fi
 

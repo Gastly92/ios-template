@@ -158,7 +158,8 @@ template's rules (RULES.md) apply here;
 the session start hook fetches the
 template into \`.template/\` and prints
 them. Rules specific to this app go
-below.
+below. TestFlight setup: the template's
+\`docs/NEW-APP.md\`.
 
 ## This app
 - What it is: (fill in)

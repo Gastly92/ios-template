@@ -45,15 +45,7 @@ the same for Claude Code sessions.
 
 ## Starting a new app
 
-1. Create an empty repo on GitHub (with a
-   README).
-2. Ask Claude: "start a new app called
-   QuestLog in this repo from
-   ios-template". It runs
-   `scripts/new-app.sh QuestLog <repo>`,
-   which copies the sample app renamed,
-   pinned to the newest version, and opens
-   a PR.
-3. For TestFlight: create the app in App
-   Store Connect and add the four secrets
-   (see RULES.md).
+See [docs/NEW-APP.md](docs/NEW-APP.md):
+create a repo, ask Claude to set it up from
+here, then (when you want it on your phone)
+the one-time TestFlight setup.

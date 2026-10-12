@@ -12,7 +12,8 @@ an app must change to update.
   Base package (`BaseUI`,
   `BaseTesting`, `BaseSnapshots`).
 - `scripts/new-app.sh` starts a new app
-  from the sample.
+  from the sample; `docs/NEW-APP.md` has
+  the steps, TestFlight setup included.
 - After recording snapshots, CI comments
   on the PR with the new run's link: the
   "Approve and run" box GitHub shows for

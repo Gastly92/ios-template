@@ -290,13 +290,14 @@ its scheme and source folder, with
   Store Connect API key, uploads to
   TestFlight, and tags the commit (e.g.
   `v0.4.6-build12`).
-- One-time setup per app: create the app
-  in App Store Connect with its bundle ID,
-  and add the repo secrets
-  `APPLE_TEAM_ID`, `ASC_ISSUER_ID`,
-  `ASC_KEY_ID` and `ASC_KEY_P8` (the same
-  team API key works for every app).
-  Never print, log, or ask for them.
+- One-time setup per app (bundle ID, App
+  Store Connect app, an API key, and the
+  repo secrets `APPLE_TEAM_ID`,
+  `ASC_ISSUER_ID`, `ASC_KEY_ID` and
+  `ASC_KEY_P8`): the owner's steps are in
+  the template's `docs/NEW-APP.md`; walk
+  them through it. Never print, log, or
+  ask for the secrets.
 - When the owner asks to ship or test on
   their phone, trigger it with
   `actions_run_trigger` (`run_workflow`,

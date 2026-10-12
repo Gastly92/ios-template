@@ -36,6 +36,10 @@ what's specific to the template.
   repo). Keep the sample using every
   shared piece, so this repo's CI tests
   them all before apps get them.
+- Keep the job names `CI` (in apps'
+  `build.yml`) and `Gate` (in `ci.yml`)
+  stable: every app's `main` ruleset
+  requires the check `CI / Gate`.
 - `scripts/new-app.sh` starts a new app
   from the sample (see README.md).
 

@@ -450,7 +450,7 @@ jobs:
   # always reports, passing when the build
   # was skipped (docs-only PR) or succeeded.
   gate:
-    name: CI Gate
+    name: Gate
     needs:
     - changes
     - lines

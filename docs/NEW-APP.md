@@ -48,8 +48,8 @@ check only shows in the list after that).
    - **Require a pull request before
      merging** (required approvals: 0).
    - **Require status checks to pass** →
-     **Add checks** → type `CI Gate` and
-     pick **CI / CI Gate**.
+     **Add checks** → type `Gate` and pick
+     **CI / Gate**.
 5. Tap **Create**.
 
 Every change to `main` then goes through a

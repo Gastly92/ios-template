@@ -7,9 +7,13 @@ app's `name:` in `project.yml`; it is also
 its scheme and source folder, with
 `<App>Tests` and `<App>UITests` beside it.
 
-## How these apps are made
-- Everything happens on an iPhone, through
-  Claude Code and GitHub; there is no Mac.
+## iPhone only
+- This template is set up for developing
+  entirely from an iPhone, with Claude
+  Code and the GitHub app, never a desktop
+  or Mac. Everything that needs a Mac
+  (building, testing, signing, uploading)
+  runs in CI.
 - Keep it simple: few steps, few questions.
   Pick sensible defaults and say what you
   chose.

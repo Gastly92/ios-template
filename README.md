@@ -1,11 +1,13 @@
 # ios-template
 
-The shared setup for SwiftUI iPhone apps
-built from an iPhone with Claude Code: CI
-on GitHub's macOS runners, TestFlight
-upload, strict lint and 100% test
+A template for SwiftUI iPhone apps, set up
+for developing entirely from an iPhone
+with Claude Code and the GitHub app, never
+a desktop or Mac. Everything that needs a
+Mac runs in CI on GitHub's macOS runners:
+building, tests (strict lint, 100%
 coverage, snapshot and localization tests
-for every screen.
+for every screen) and TestFlight upload.
 
 Apps use it as a versioned dependency: each
 app pins a tag (e.g. `v1.0.0`), Dependabot

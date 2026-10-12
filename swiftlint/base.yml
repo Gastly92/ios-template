@@ -141,9 +141,7 @@ custom_rules:
     severity: error
   # Swift 6 mode makes data races compile
   # errors; these switch that check off for
-  # a type, value or import. Tests run
-  # without Thread Sanitizer because
-  # nothing uses them.
+  # a type, value or import.
   unchecked_concurrency:
     name: "Unchecked concurrency"
     message: >-

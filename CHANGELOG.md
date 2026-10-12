@@ -13,7 +13,8 @@ an app must change to update.
   `BaseTesting`, `BaseSnapshots`).
 - `scripts/new-app.sh` starts a new app
   from the sample; `docs/NEW-APP.md` has
-  the steps, TestFlight setup included.
+  the steps, branch rules and TestFlight
+  setup included.
 - After recording snapshots, CI comments
   on the PR with the new run's link: the
   "Approve and run" box GitHub shows for

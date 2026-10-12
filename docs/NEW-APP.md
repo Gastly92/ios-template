@@ -24,12 +24,38 @@ Its bundle ID is `com.gastly92.questlog`
 Start a Claude Code session on the new repo
 and send: "Help me set this repo up using
 the template." Claude sets up the app in a
-PR, then walks you through steps 3–8 one at
-a time. They're here for reference; steps
-3–8 can wait until you want the app on your
-phone.
+PR, then walks you through the steps below
+one at a time; they're here for reference.
+Steps 4–9 (TestFlight) can wait until you
+want the app on your phone.
 
-## 3. Find your Team ID
+## 3. Protect the main branch
+GitHub doesn't copy a template's branch
+rules, so each new repo needs its own. Do
+this once the setup PR's CI has run (its
+check only shows in the list after that).
+1. Open the repo on github.com →
+   **Settings** → **Rules** → **Rulesets**
+   → **New ruleset** → **New branch
+   ruleset**.
+2. Name: `main`. Enforcement status:
+   **Active**.
+3. Target branches: **Add target** →
+   **Include default branch**.
+4. Under Rules, keep **Restrict
+   deletions** and **Block force pushes**
+   ticked, and tick:
+   - **Require a pull request before
+     merging** (required approvals: 0).
+   - **Require status checks to pass** →
+     **Add checks** → type `CI Gate` and
+     pick **CI / CI Gate**.
+5. Tap **Create**.
+
+Every change to `main` then goes through a
+PR, and a PR merges only when CI passes.
+
+## 4. Find your Team ID
 Skip if you have it from an earlier app.
 1. Open developer.apple.com/account and
    sign in.
@@ -37,7 +63,7 @@ Skip if you have it from an earlier app.
    copy the **Team ID** (10 characters,
    like `AB12CD34EF`) into Notes.
 
-## 4. Register the bundle ID
+## 5. Register the bundle ID
 1. Open
    developer.apple.com/account/resources/identifiers.
 2. Tap **+** → **App IDs** → Continue →
@@ -46,16 +72,16 @@ Skip if you have it from an earlier app.
    **Explicit**, `com.gastly92.questlog`.
 4. Tap Continue → **Register**.
 
-## 5. Create the app in App Store Connect
+## 6. Create the app in App Store Connect
 1. Open appstoreconnect.apple.com →
    **Apps** → **+** → **New App**.
 2. Platform **iOS**; name it (if the name
    is taken, add a word; you can change it
-   later); pick the bundle ID from step 4;
+   later); pick the bundle ID from step 5;
    SKU: `questlog`; **Full Access**.
 3. Tap **Create**.
 
-## 6. Create an API key
+## 7. Create an API key
 GitHub can't copy secrets between repos,
 and Apple lets you download a key only
 once, so each app gets its own key. (That
@@ -76,7 +102,7 @@ without touching the others.)
    it, and copy all its text (including the
    `-----BEGIN` and `-----END` lines).
 
-## 7. Add the four GitHub secrets
+## 8. Add the four GitHub secrets
 1. Open the repo on github.com →
    **Settings** → **Secrets and variables**
    → **Actions**.
@@ -84,14 +110,14 @@ without touching the others.)
 
 | Name | Value |
 |---|---|
-| `APPLE_TEAM_ID` | Team ID (step 3) |
-| `ASC_ISSUER_ID` | Issuer ID (step 6) |
-| `ASC_KEY_ID` | Key ID (step 6) |
-| `ASC_KEY_P8` | Key text (step 6) |
+| `APPLE_TEAM_ID` | Team ID (step 4) |
+| `ASC_ISSUER_ID` | Issuer ID (step 7) |
+| `ASC_KEY_ID` | Key ID (step 7) |
+| `ASC_KEY_P8` | Key text (step 7) |
 
 Then delete the key file from Files.
 
-## 8. Build and install
+## 9. Build and install
 1. In App Store Connect, open the app →
    **TestFlight** → **Internal Testing** →
    **+**, name the group `Me`, and add
@@ -103,7 +129,7 @@ Then delete the key file from Files.
    for Apple to process the build. Install
    it from the **TestFlight** app.
 
-Later builds: just step 8.2.
+Later builds: just step 9.2.
 
 ## Setting up a new repo (for Claude)
 When a repo made with "Use this template"
@@ -127,8 +153,10 @@ hook says so):
    the starting snapshots in a bot commit
    (no need to approve the duplicate run).
    Get CI green; the user merges.
-4. Ask whether to set up TestFlight now.
-   If so, walk the user through steps 3–8
+4. Walk the user through step 3 (branch
+   rules); it's needed once CI has run.
+5. Ask whether to set up TestFlight now.
+   If so, walk the user through steps 4–9
    above one at a time, waiting
    for each to be done; never ask for the
    secrets' values. Then trigger the

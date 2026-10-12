@@ -61,7 +61,9 @@ its scheme and source folder, with
   long building and each shard took.
   Docs-only PRs (`*.md`, `docs/`, `site/`)
   skip the macOS jobs. `CI / CI Gate` is
-  the single pass/fail check for a PR.
+  the single pass/fail check for a PR; the
+  repo's `main` ruleset requires it (see
+  the template's `docs/NEW-APP.md`).
 - Tests: `<App>Tests/` (unit tests for
   logic in `<App>/Models/`) and
   `<App>UITests/` (XCTest UI tests that

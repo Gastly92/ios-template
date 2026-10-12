@@ -7,14 +7,14 @@ app's `name:` in `project.yml`; it is also
 its scheme and source folder, with
 `<App>Tests` and `<App>UITests` beside it.
 
-## Working with the owner
-- The owner develops entirely from an
-  iPhone via Claude Code; there is no Mac.
+## How these apps are made
+- Everything happens on an iPhone, through
+  Claude Code and GitHub; there is no Mac.
 - Keep it simple: few steps, few questions.
   Pick sensible defaults and say what you
   chose.
-- Explain anything they must do by hand as
-  short numbered steps for iPhone Safari.
+- Explain anything done by hand as short
+  numbered steps for iPhone Safari.
   App Store Connect's mobile layout can
   hide buttons; Safari's Find on page
   helps.
@@ -29,8 +29,8 @@ its scheme and source folder, with
   Base package. Dependabot opens a PR for
   each new version; CI on that PR shows
   whether the app still passes. Check the
-  template's CHANGELOG.md, summarize it,
-  and let the owner merge.
+  template's CHANGELOG.md and summarize
+  it; the user merges.
 - CI and the session start hook check the
   template out into `.template/` (git
   ignores it). Run its scripts from the
@@ -200,10 +200,10 @@ its scheme and source folder, with
   `ifTapped`, e.g. `app.pushed(title)`),
   after closing it, up to twice, and logs
   "Long-press read as a tap" in the CI log
-  each time. Any other miss fails. The
-  owner wants 100% coverage kept and
-  accepts retries like this one: tied to a
-  detected stall sign, never blind.
+  each time. Any other miss fails. 100%
+  coverage stays; retries are allowed only
+  like this one: tied to a detected stall
+  sign, never blind.
   Likewise `run-tests.sh` runs a shard
   once more only when the UI test runner
   failed to start and no UI test ran, or
@@ -252,7 +252,7 @@ its scheme and source folder, with
   fails on unused code. Delete it rather
   than ignore it; no `periphery:ignore`
   comments. For a real false positive,
-  restructure the code or ask the owner.
+  restructure the code or ask the user.
 - Stored data must never be lost: version
   stored models (e.g. SwiftData
   `VersionedSchema`) from the first
@@ -286,12 +286,12 @@ its scheme and source folder, with
   Store Connect app, an API key, and the
   repo secrets `APPLE_TEAM_ID`,
   `ASC_ISSUER_ID`, `ASC_KEY_ID` and
-  `ASC_KEY_P8`): the owner's steps are in
-  the template's `docs/NEW-APP.md`; walk
-  them through it. Never print, log, or
+  `ASC_KEY_P8`): the steps are in the
+  template's `docs/NEW-APP.md`; walk the
+  user through them. Never print, log, or
   ask for the secrets.
-- When the owner asks to ship or test on
-  their phone, trigger it with
+- When asked to ship or test on the
+  phone, trigger it with
   `actions_run_trigger` (`run_workflow`,
   `workflow_id: testflight.yml`,
   `ref: main`). Verify the log shows

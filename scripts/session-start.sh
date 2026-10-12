@@ -39,7 +39,7 @@ It was made from ios-template ("Use this
 template") and is still the template's
 sample. Follow "Setting up a new repo
 (for Claude)" in docs/NEW-APP.md as soon
-as the owner asks for anything, before
+as the user asks for anything, before
 other work.
 
 MD

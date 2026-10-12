@@ -126,10 +126,10 @@ hook says so):
    commit, push and open a PR. CI records
    the starting snapshots in a bot commit
    (no need to approve the duplicate run).
-   Get CI green; the owner merges.
-4. Ask whether the owner wants TestFlight
-   set up now. If so, walk them through
-   steps 3–8 above one at a time, waiting
+   Get CI green; the user merges.
+4. Ask whether to set up TestFlight now.
+   If so, walk the user through steps 3–8
+   above one at a time, waiting
    for each to be done; never ask for the
    secrets' values. Then trigger the
    TestFlight workflow and check the log

@@ -1,7 +1,7 @@
 # CLAUDE.md
 
-ios-template: the shared setup for the
-owner's iOS apps (CI, scripts, SwiftLint
+ios-template: the shared setup for iOS
+apps built with it (CI, scripts, SwiftLint
 rules, TestFlight upload and the Base Swift
 package), used by each app as a versioned
 dependency. README.md explains the layout.
@@ -58,6 +58,6 @@ what's specific to the template.
 - Dependabot opens weekly PRs for the
   Actions, SwiftLint and Swift package
   versions here. Check CI and summarize
-  what changed (release notes); the owner
+  what changed (release notes); the user
   reviews and merges them, then tag a
   release.

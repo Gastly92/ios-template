@@ -1,0 +1,28 @@
+# Dependabot opens a PR when a newer version
+# of something the template depends on is
+# out: the GitHub Actions the shared
+# workflows use, SwiftLint, and the Swift
+# packages Base uses. Weekly, grouped so it
+# stays quiet. Apps get these through a new
+# template version.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+  # SwiftLint, pinned in this Dockerfile.
+  - package-ecosystem: docker
+    directory: /swiftlint
+    schedule:
+      interval: weekly
+  - package-ecosystem: swift
+    directory: /Packages/Base
+    schedule:
+      interval: weekly
+    groups:
+      swift:
+        patterns: ["*"]

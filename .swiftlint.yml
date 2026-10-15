@@ -1,0 +1,10 @@
+# The shared rules, from the template at the
+# version this repo pins (.template/ is
+# fetched by CI and the session start hook).
+parent_config: .template/swiftlint/base.yml
+
+included:
+  - Sample
+  - SampleTests
+  - SampleUITests
+  - Packages

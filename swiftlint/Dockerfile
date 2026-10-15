@@ -3,4 +3,4 @@
 # Dependabot opens a PR when a new version
 # is out. Never built: only this line is
 # read.
-FROM ghcr.io/realm/swiftlint:0.65.1
+FROM ghcr.io/realm/swiftlint:5.5-0.48.0

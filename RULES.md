@@ -272,11 +272,11 @@ its scheme and source folder, with
   opens the store (in memory for UI and
   snapshot tests); if it can't,
   `StoreErrorView` shows instead.
-- Sample data (`SampleData`) fills the
+- Sample data (`SeedData`) fills the
   screens that need it in UI tests,
   snapshots and App Store screenshots
   (`ScreenID.isSeeded`, or launching with
-  `-seedSampleData`). Its text stands for
+  `-seedData`). Its text stands for
   what a user typed, so
   `LocalizationTests` lets it through.
 - Notifications go through a `Notifier`

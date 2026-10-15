@@ -68,13 +68,13 @@ struct AppLaunch {
       return
     }
     screen.prepare(defaults)
-    let flag = "-seedSampleData"
+    let flag = "-seedData"
     let seed = args.contains(flag)
       || screen.isSeeded
     guard seed,
       case .success(let container) = store
     else { return }
-    SampleData.insert(
+    SeedData.insert(
       into: container.mainContext
     )
   }

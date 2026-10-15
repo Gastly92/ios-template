@@ -3,7 +3,7 @@ import SwiftData
 
 /// Items for tests and screenshots, as if
 /// the user had typed them.
-enum SampleData {
+enum SeedData {
   static let titles = [
     "Groceries", "Books", "Ideas",
   ]

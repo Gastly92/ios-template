@@ -33,7 +33,7 @@ enum TestScreens {
     )
     stores.append(store)
     if screen.isSeeded {
-      SampleData.insert(
+      SeedData.insert(
         into: store.mainContext,
         now: now
       )

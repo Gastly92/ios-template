@@ -69,7 +69,7 @@ final class AppLaunchTests: XCTestCase {
     )
   }
 
-  func testSeededScreensGetSampleItems()
+  func testSeededScreensGetItems()
     throws {
     let seeded = launch([
       "-uiTesting", "-showScreen", "item",
@@ -78,7 +78,7 @@ final class AppLaunchTests: XCTestCase {
     let items = try container.mainContext
       .fetch(FetchDescriptor<Item>())
     XCTAssertEqual(
-      items.count, SampleData.titles.count
+      items.count, SeedData.titles.count
     )
   }
 

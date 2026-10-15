@@ -19,6 +19,12 @@ updates:
     directory: /swiftlint
     schedule:
       interval: weekly
+    # Old images tagged by Swift version
+    # (e.g. 5.5-0.48.0) look newer than
+    # 0.65.1 but aren't.
+    ignore:
+      - dependency-name: realm/swiftlint
+        versions: [">= 5"]
   - package-ecosystem: swift
     directory: /Packages/Base
     schedule:

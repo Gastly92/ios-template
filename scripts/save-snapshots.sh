@@ -51,7 +51,10 @@ started=$(gh workflow run "$WORKFLOW" \
 echo "$started"
 run=$(grep -o 'https://[^ ]*' \
   <<<"$started" | head -1)
-gh pr comment "$PR" --body "$(cat <<MD
+# A file, not $(cat <<MD): macOS's bash 3.2
+# misreads a quote in a heredoc inside $().
+note=$(mktemp)
+cat > "$note" <<MD
 Recorded snapshot images and pushed them.
 CI runs again here: ${run:-see Actions}.
 
@@ -59,5 +62,6 @@ No need to tap **Approve and run**: that
 run is a duplicate GitHub holds for the
 bot's push.
 MD
-)" || true
+gh pr comment "$PR" --body-file "$note" \
+  || true
 echo "Pushed the images; CI runs again."

@@ -21,6 +21,7 @@ SettingsView.swift
   schedule()
   minutes = Reminder.minutes(of: $0)
   private func schedule() {
+  Task {
   await reminder.apply(to: notifier)
 
 # UI tests open the store error through the

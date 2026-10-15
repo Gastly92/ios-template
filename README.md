@@ -23,9 +23,11 @@ before it's merged.
 | `.github/workflows/testflight.yml` | Shared TestFlight upload |
 | `scripts/` | The scripts CI and sessions run |
 | `swiftlint/` | Shared SwiftLint rules and version |
-| `Packages/Base` | Shared Swift code: `BaseUI`, `BaseTesting`, `BaseSnapshots` |
+| `.github/workflows/pages.yml` | Shared support pages publishing |
+| `Packages/Base` | Shared Swift code: `Base` (view helpers, notifications), `BaseTesting`, `BaseSnapshots` (snapshots, App Store screenshots) |
 | `RULES.md` | Rules for every app (and Claude) |
-| `Sample*/`, `project.yml` | A small app that runs all of it |
+| `Sample*/`, `project.yml`, `site/` | The starter app every new app begins as: saved items, settings with a daily reminder, support pages, privacy manifest, icon and App Store screenshots |
+| `scripts/app-icon.sh`, `app-header.sh` | Draw an app's icon and App Store header |
 | `CHANGELOG.md` | What each version changed |
 
 ## Using it in an app

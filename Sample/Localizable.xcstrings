@@ -1,8 +1,8 @@
 {
   "sourceLanguage": "en",
   "strings": {
-    "%lld taps": {
-      "comment": "The count on the counter screen.",
+    "%lld items": {
+      "comment": "How many items are in the list.",
       "localizations": {
         "en": {
           "variations": {
@@ -10,13 +10,13 @@
               "one": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "%lld tap"
+                  "value": "%lld item"
                 }
               },
               "other": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "%lld taps"
+                  "value": "%lld items"
                 }
               }
             }

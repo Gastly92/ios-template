@@ -60,14 +60,16 @@ done
 for file in project.yml .swiftlint.yml \
   .gitignore .github/unpictured.txt \
   .claude/settings.json \
-  .claude/hooks/session-start.sh; do
+  .claude/hooks/session-start.sh \
+  site/index.html site/privacy.html \
+  site/style.css; do
   mkdir -p "$(dirname "$dest/$file")"
   cp "$here/$file" "$dest/$file"
 done
 
 # Every copied text file: Sample becomes the
-# app's name, in code and bundle IDs.
-grep -rlE 'Sample|sample' "$dest" \
+# app's name, in code, pages and bundle IDs.
+grep -rlIE 'Sample|sample' "$dest" \
   --exclude-dir=.git \
   | while IFS= read -r file; do
     sed -i.bak -e "s/Sample/$name/g" \
@@ -140,6 +142,37 @@ jobs:
     name: TestFlight
     uses: $shared/testflight.yml@$version
     secrets: inherit
+YML
+
+cat > "$flows/pages.yml" <<YML
+name: Pages
+
+# Publishes site/ (the App Store support
+# and privacy pages) to GitHub Pages with
+# the template's shared workflow. Needs
+# Settings → Pages → Source set to "GitHub
+# Actions" once (the template's
+# docs/NEW-APP.md).
+on:
+  push:
+    branches: [main]
+    paths:
+      - site/**
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  pages:
+    name: Pages
+    uses: $shared/pages.yml@$version
 YML
 
 cat > "$dest/.github/dependabot.yml" <<YML

@@ -158,8 +158,8 @@ its scheme and source folder, with
   - Use the Base package's helpers:
     `LeadingStack`, `SectionTitle`,
     `.testID(_:)`, `.fullWidth(_:)`,
-    `.wrapsText()`, `\.now` (`BaseUI`); in
-    UI tests `App.start`,
+    `.wrapsText()`, `\.now`, `Notifier`
+    (`Base`); in UI tests `App.start`,
     `app.text/button/field/bar(_:)`,
     `app.menuItem(_:on:ifTapped:)`
     (long-press; see below),
@@ -259,12 +259,41 @@ its scheme and source folder, with
   than ignore it; no `periphery:ignore`
   comments. For a real false positive,
   restructure the code or ask the user.
-- Stored data must never be lost: version
-  stored models (e.g. SwiftData
-  `VersionedSchema`) from the first
-  release on, never edit a released
-  schema, and add a migration and a test
-  that the previous version's data opens.
+- Saved data (SwiftData) must never be
+  lost. The starter's models are in
+  `Models/Schema.swift` (`SchemaV1`, used
+  through aliases such as `Item`), frozen
+  from the first release on: never edit a
+  released schema. To change a stored
+  model, follow the steps in that file: a
+  new schema version, a migration stage,
+  and a test that the previous version's
+  data opens (`StoreTests`). `AppStore`
+  opens the store (in memory for UI and
+  snapshot tests); if it can't,
+  `StoreErrorView` shows instead.
+- Sample data (`SampleData`) fills the
+  screens that need it in UI tests,
+  snapshots and App Store screenshots
+  (`ScreenID.isSeeded`, or launching with
+  `-seedSampleData`). Its text stands for
+  what a user typed, so
+  `LocalizationTests` lets it through.
+- Notifications go through a `Notifier`
+  (`Base`) that `AppLaunch` passes in: the
+  phone's notification center normally,
+  `SilentNotifier` in UI tests (no
+  permission prompt, nothing scheduled),
+  and `RecordingNotifier` in unit tests to
+  check what's scheduled. One UI test
+  launches with `-notifications` to see
+  the real permission prompt. What to
+  schedule is decided in `Models/` (e.g.
+  `Reminder`) and unit tested.
+- Settings use `@AppStorage` with the
+  `UserDefaults` `AppLaunch` passes in (an
+  emptied suite in UI tests, set up per
+  screen by `ScreenID.prepare`).
 - The Xcode project is generated from
   `project.yml` by XcodeGen. Never add a
   `.xcodeproj`; put new source files under
@@ -324,7 +353,39 @@ its scheme and source folder, with
   and likely changes to the shared
   TestFlight workflow (it archives with
   `CODE_SIGNING_ALLOWED=NO`).
-- Keep a privacy manifest
-  (`PrivacyInfo.xcprivacy`) true to what
-  the app does, e.g. `UserDefaults` /
-  `@AppStorage` need reason `CA92.1`.
+- Keep the privacy manifest
+  (`<App>/PrivacyInfo.xcprivacy`) and the
+  privacy page (`site/privacy.html`) true
+  to what the app does: update both when
+  adding tracking, collected data, or APIs
+  Apple requires a reason for (e.g.
+  `UserDefaults` / `@AppStorage`: reason
+  `CA92.1`). `PrivacyInfoTests` checks the
+  manifest (`PrivacyManifest` in
+  `BaseTesting`).
+- `site/` holds the App Store support and
+  privacy pages; `pages.yml` publishes
+  them to GitHub Pages on each push to
+  `main` that changes them, at
+  `https://<owner>.github.io/<repo>/` and
+  `.../privacy.html` (the URLs App Store
+  Connect asks for). Keep the support page
+  true to the app's features.
+- App Store screenshots: `AppStoreTests`
+  draws them with `AppStoreShots`
+  (`BaseSnapshots`) from the same screens
+  as the snapshots, framed and captioned,
+  at the sizes App Store Connect takes;
+  the images to upload are in
+  `<App>Tests/__Snapshots__/AppStoreTests/`.
+  Update the shots and captions when a
+  pictured screen or a listed feature
+  changes.
+- The app icon comes from
+  `.template/scripts/app-icon.sh <mark>
+  <color> <color>` (a letter or two on a
+  gradient, in light, dark and tinted),
+  and the product page header from
+  `.template/scripts/app-header.sh`. Both
+  run in the cloud session (ImageMagick).
+  Use the same colors in `AppStoreTests`.

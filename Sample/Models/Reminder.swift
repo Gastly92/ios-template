@@ -38,6 +38,7 @@ struct Reminder: Equatable {
 
   /// Asks for permission when on, then
   /// schedules (or clears) the reminder.
+  @MainActor
   func apply(
     to notifier: any Notifier
   ) async {

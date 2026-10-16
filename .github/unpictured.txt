@@ -7,8 +7,25 @@
 # with a # comment saying why. Lines of
 # only brackets or quotes are skipped.
 
-# Taps: Add, and Reset in the
+# Taps: open an item (pictured as its own
+# screen), add one, and Delete in the
 # long-press menu.
-CounterView.swift
-  tally.add()
-  tally.reset()
+ItemListView.swift
+  ItemView(item: $0)
+  context.delete(item)
+  context.insert(Item.fresh(at: now))
+
+# Changes: the switch and the time picker
+# schedule the reminder.
+SettingsView.swift
+  schedule()
+  minutes = Reminder.minutes(of: $0)
+  private func schedule() {
+  Task {
+  await reminder.apply(to: notifier)
+
+# UI tests open the store error through the
+# real failure (AppLaunch); snapshots use
+# this case.
+ScreenHost.swift
+  StoreErrorView(details: Self.error)

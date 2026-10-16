@@ -29,11 +29,13 @@ one at a time; they're here for reference.
 Steps 4–9 (TestFlight) can wait until you
 want the app on your phone.
 
-## 3. Protect the main branch
-GitHub doesn't copy a template's branch
-rules, so each new repo needs its own. Do
-this once the setup PR's CI has run (its
+## 3. GitHub settings
+GitHub doesn't copy a template's settings,
+so each new repo needs these once. Do them
+after the setup PR's CI has run (its
 check only shows in the list after that).
+
+First, protect the main branch:
 1. Open the repo on github.com →
    **Settings** → **Rules** → **Rulesets**
    → **New ruleset** → **New branch
@@ -54,6 +56,16 @@ check only shows in the list after that).
 
 Every change to `main` then goes through a
 PR, and a PR merges only when CI passes.
+
+Then turn on the support pages (the App
+Store asks for a support and a privacy
+policy link):
+1. **Settings** → **Pages** → Source:
+   **GitHub Actions**.
+2. Once the setup PR is merged, the pages
+   are at `https://gastly92.github.io/quest-log/`
+   and `.../privacy.html` (your repo's
+   name in place of `quest-log`).
 
 ## 4. Find your Team ID
 Skip if you have it from an earlier app.
@@ -147,14 +159,19 @@ hook says so):
    app (the sample renamed, pinned to the
    newest template version) and fetches
    the template into `.template/`.
-3. Fill in CLAUDE.md's "This app" section,
-   run `.template/scripts/swiftlint.sh`,
+3. Fill in CLAUDE.md's "This app" section
+   and the support page (`site/`) with
+   what the app is for. setup-app.sh drew
+   an icon from the name's first letter;
+   offer to redraw it (`app-icon.sh`).
+   Run `.template/scripts/swiftlint.sh`,
    commit, push and open a PR. CI records
    the starting snapshots in a bot commit
    (no need to approve the duplicate run).
    Get CI green; the user merges.
 4. Walk the user through step 3 (branch
-   rules); it's needed once CI has run.
+   rules and Pages); it's needed once CI
+   has run.
 5. Ask whether to set up TestFlight now.
    If so, walk the user through steps 4–9
    above one at a time, waiting

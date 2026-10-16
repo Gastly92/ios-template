@@ -1,7 +1,8 @@
 // swift-tools-version: 6.0
 // Code shared by every app: view helpers
-// (BaseUI), UI test helpers (BaseTesting)
-// and snapshot test helpers
+// and notifications (Base), test helpers
+// (BaseTesting), and snapshot and App
+// Store screenshot helpers
 // (BaseSnapshots). Apps use it from
 // .template/, the template checked out at
 // the version they pin. Swift 6 language
@@ -13,8 +14,8 @@ let package = Package(
   platforms: [.iOS(.v17)],
   products: [
     .library(
-      name: "BaseUI",
-      targets: ["BaseUI"]
+      name: "Base",
+      targets: ["Base"]
     ),
     .library(
       name: "BaseTesting",
@@ -35,8 +36,11 @@ let package = Package(
     ),
   ],
   targets: [
-    .target(name: "BaseUI"),
-    .target(name: "BaseTesting"),
+    .target(name: "Base"),
+    .target(
+      name: "BaseTesting",
+      dependencies: ["Base"]
+    ),
     .target(
       name: "BaseSnapshots",
       dependencies: [

@@ -6,7 +6,7 @@ public typealias App = XCUIApplication
 public extension XCUIApplication {
   /// Launches the app for a UI test with
   /// `-uiTesting` (the app turns off
-  /// animations), and `-seedSampleData` when
+  /// animations), and `-seedData` when
   /// `seeded`.
   @MainActor
   static func start(
@@ -15,7 +15,7 @@ public extension XCUIApplication {
   ) -> XCUIApplication {
     let app = XCUIApplication()
     let seed = seeded
-      ? ["-seedSampleData"] : []
+      ? ["-seedData"] : []
     app.launchArguments =
       ["-uiTesting"] + seed + arguments
     app.launch()

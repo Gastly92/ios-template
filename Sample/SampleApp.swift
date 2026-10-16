@@ -21,7 +21,24 @@ struct SampleApp: App {
 
   var body: some Scene {
     WindowGroup {
-      ScreenHost(screen: launch.screen)
+      content
+    }
+  }
+
+  @ViewBuilder
+  private var content: some View {
+    switch launch.store {
+    case .success(let container):
+      ScreenHost(
+        screen: launch.screen,
+        notifier: launch.notifier,
+        defaults: launch.defaults
+      )
+      .modelContainer(container)
+    case .failure(let error):
+      StoreErrorView(
+        details: error.localizedDescription
+      )
     }
   }
 }

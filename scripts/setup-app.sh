@@ -41,12 +41,27 @@ An iOS app built on
 See CLAUDE.md.
 MD
 
+# The pages link to this repo's issues.
+slug=$(sed -E 's#^.*[/:]([^/]+/[^/]+)$#\1#' \
+  <<<"${origin%.git}")
+here=gastly92/ios-template
+sed -i.bak "s#$here#$slug#g" site/*.html
+rm site/*.bak
+
 # The pinned template, as a session's start
 # hook fetches it, so linting works now.
 CLAUDE_CODE_REMOTE=true \
   CLAUDE_PROJECT_DIR="$root" \
   CLAUDE_ENV_FILE=/dev/null \
   .claude/hooks/session-start.sh >/dev/null
+
+# An icon to start with: the name's first
+# letter on the template's colors (redraw
+# with app-icon.sh any time).
+if command -v convert >/dev/null; then
+  .template/scripts/app-icon.sh \
+    "${name:0:1}" '#00B4F0' '#8B2CF5'
+fi
 
 git add -A
 echo "Set up $name. Review, commit and push."

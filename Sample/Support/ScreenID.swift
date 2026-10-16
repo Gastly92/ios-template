@@ -13,5 +13,7 @@
 /// fails if a view in `Views/Screens/` isn't
 /// shown there.
 enum ScreenID: String, CaseIterable {
-  case counter, counted, info
+  case items, itemsEmpty, item
+  case settings, settingsOn
+  case storeError
 }

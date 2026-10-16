@@ -39,7 +39,7 @@ targets:
       - Sample
     dependencies:
       - package: Base
-        product: BaseUI
+        product: Base
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER:
@@ -55,6 +55,10 @@ targets:
           UIInterfaceOrientationPortrait
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption:
           NO
+        # Drawn by the template's
+        # scripts/app-icon.sh.
+        ASSETCATALOG_COMPILER_APPICON_NAME:
+          AppIcon
         TARGETED_DEVICE_FAMILY: "1"
         CODE_SIGN_STYLE: Automatic
   SampleTests:
@@ -64,6 +68,10 @@ targets:
       - SampleTests
     dependencies:
       - target: Sample
+      - package: Base
+        product: Base
+      - package: Base
+        product: BaseTesting
       - package: Base
         product: BaseSnapshots
     settings:

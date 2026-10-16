@@ -33,9 +33,16 @@ what's specific to the template.
   `SampleTests/` and `SampleUITests/`,
   with `build.yml` calling the local
   `ci.yml` (here `.template/` is this
-  repo). Keep the sample using every
-  shared piece, so this repo's CI tests
-  them all before apps get them.
+  repo). It is also every new app's
+  starting point: a list of saved items,
+  an item's screen, and settings with a
+  daily reminder, plus the store error
+  screen, support pages, privacy
+  manifest, icon and App Store
+  screenshots. Keep it using every shared
+  piece, so this repo's CI tests them all
+  before apps get them, and keep it
+  general enough to build any app on.
 - Keep the job names `CI` (in apps'
   `build.yml`) and `Gate` (in `ci.yml`)
   stable: every app's `main` ruleset

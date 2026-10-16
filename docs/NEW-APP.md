@@ -57,6 +57,13 @@ First, protect the main branch:
 Every change to `main` then goes through a
 PR, and a PR merges only when CI passes.
 
+Then have merged PRs' branches deleted:
+1. **Settings** → **General** → the **Pull
+   Requests** section (Find on page:
+   "delete head").
+2. Tick **Automatically delete head
+   branches** (saves at once).
+
 Then turn on the support pages (the App
 Store asks for a support and a privacy
 policy link):
@@ -170,8 +177,8 @@ hook says so):
    (no need to approve the duplicate run).
    Get CI green; the user merges.
 4. Walk the user through step 3 (branch
-   rules and Pages); it's needed once CI
-   has run.
+   rules, branch deletion and Pages); it's
+   needed once CI has run.
 5. Ask whether to set up TestFlight now.
    If so, walk the user through steps 4–9
    above one at a time, waiting

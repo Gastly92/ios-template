@@ -4,6 +4,19 @@ Each version of the template. Apps pin one
 (see README.md); a major version lists what
 an app must change to update.
 
+## v1.0.1
+- Base is a dynamic library, so an app
+  and its unit tests share one copy.
+  Linked statically, the test bundle had
+  its own: a test's `\.now` (e.g. the
+  snapshots' fixed day) never reached the
+  app's views, and `is` checks on Base
+  types the app made never matched.
+- `RecordingNotifier` moved from
+  `BaseTesting` to `Base` (BaseTesting no
+  longer depends on Base): tests using it
+  `import Base`.
+
 ## v1.0.0
 - The shared CI (`ci.yml`, required check
   `CI / Gate`), TestFlight upload

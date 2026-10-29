@@ -64,6 +64,37 @@ public struct SilentNotifier: Notifier {
   }
 }
 
+/// Unit tests: a `Notifier` that remembers
+/// what the app asked for. In Base, not
+/// BaseTesting, so test bundles use the
+/// app's one copy of Base.
+@MainActor
+public final class RecordingNotifier:
+  Notifier {
+  /// How many times the app asked to show
+  /// notifications.
+  public private(set) var asks = 0
+  /// The last set of notifications the app
+  /// scheduled.
+  public private(set) var scheduled:
+    [UNNotificationRequest] = []
+
+  /// A notifier with nothing recorded yet.
+  public init() {
+    // Nothing recorded yet.
+  }
+
+  public func ask() {
+    asks += 1
+  }
+
+  public func replace(
+    with requests: [UNNotificationRequest]
+  ) {
+    scheduled = requests
+  }
+}
+
 public extension UNNotificationRequest {
   /// A notification shown every day at
   /// `hour`:`minute`, replacing any earlier

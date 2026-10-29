@@ -13,8 +13,16 @@ let package = Package(
   name: "Base",
   platforms: [.iOS(.v17)],
   products: [
+    // Dynamic: the app embeds it once, and
+    // its unit tests (run inside the app)
+    // use that same copy. Linked
+    // statically, the test bundle got a copy
+    // of its own: its `\.now` was a key the
+    // app's views never read, and `is`
+    // checks on Base types never matched.
     .library(
       name: "Base",
+      type: .dynamic,
       targets: ["Base"]
     ),
     .library(
@@ -37,10 +45,10 @@ let package = Package(
   ],
   targets: [
     .target(name: "Base"),
-    .target(
-      name: "BaseTesting",
-      dependencies: ["Base"]
-    ),
+    // No Base dependency: that would link a
+    // second copy of Base into test
+    // bundles.
+    .target(name: "BaseTesting"),
     .target(
       name: "BaseSnapshots",
       dependencies: [

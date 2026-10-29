@@ -11,16 +11,6 @@ final class AppLaunchTests: XCTestCase {
       try AppStore.open(inMemory: true)
     }
 
-  /// The notifier's type name. (Compared by
-  /// name: the app and this test bundle
-  /// each link their own copy of Base, so
-  /// `is` checks can't match.)
-  private func kind(
-    _ notifier: any Notifier
-  ) -> String {
-    String(describing: type(of: notifier))
-  }
-
   private func launch(
     _ args: [String]
   ) -> AppLaunch {
@@ -31,8 +21,10 @@ final class AppLaunchTests: XCTestCase {
     let normal = launch([])
     XCTAssertFalse(normal.isUITesting)
     XCTAssertEqual(normal.screen, .items)
-    XCTAssertEqual(
-      kind(normal.notifier), "PhoneNotifier"
+    // `is` matches only if the app and this
+    // test bundle share one copy of Base.
+    XCTAssertTrue(
+      normal.notifier is PhoneNotifier
     )
     XCTAssertEqual(
       normal.defaults, .standard
@@ -47,8 +39,8 @@ final class AppLaunchTests: XCTestCase {
     ])
     XCTAssertTrue(shown.isUITesting)
     XCTAssertEqual(shown.screen, .settingsOn)
-    XCTAssertEqual(
-      kind(shown.notifier), "SilentNotifier"
+    XCTAssertTrue(
+      shown.notifier is SilentNotifier
     )
     let isOn = shown.defaults.bool(
       forKey: Reminder.onKey
@@ -64,8 +56,8 @@ final class AppLaunchTests: XCTestCase {
     let real = launch([
       "-uiTesting", "-notifications",
     ])
-    XCTAssertEqual(
-      kind(real.notifier), "PhoneNotifier"
+    XCTAssertTrue(
+      real.notifier is PhoneNotifier
     )
   }
 

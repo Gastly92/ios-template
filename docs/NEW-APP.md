@@ -74,6 +74,13 @@ policy link):
    and `.../privacy.html` (your repo's
    name in place of `quest-log`).
 
+Last, so snapshot images CI records start
+CI by themselves (no "Approve and run"):
+install the snapshot app on the repo and
+add its two secrets
+([SNAPSHOT-APP.md](SNAPSHOT-APP.md)).
+Optional: without it CI still works.
+
 ## 4. Find your Team ID
 Skip if you have it from an earlier app.
 1. Open developer.apple.com/account and
@@ -176,8 +183,9 @@ hook says so):
    (no need to approve the duplicate run).
    Get CI green; the user merges.
 4. Walk the user through step 3 (branch
-   rules, branch deletion and Pages); it's
-   needed once CI has run.
+   rules, branch deletion, Pages and the
+   snapshot app); it's needed once CI has
+   run.
 5. Ask whether to set up TestFlight now.
    If so, walk the user through steps 4–9
    above one at a time, waiting

@@ -248,6 +248,12 @@ jobs:
       contents: write
       actions: write
       pull-requests: write
+    # Whether the snapshot app's secrets are
+    # set (docs/SNAPSHOT-APP.md). Dependabot
+    # PRs can't read them.
+    env:
+      HAS_APP: >-
+        ${{ secrets.SNAPSHOT_APP_KEY != '' }}
     steps:
     - uses: actions/checkout@v7
 
@@ -282,6 +288,28 @@ jobs:
         .github/scripts/run-tests.sh test
         ${{ matrix.shard }}
 
+    # A short-lived token from the snapshot
+    # app: its push starts CI like any push.
+    # A push with CI's own token would only
+    # get a run held behind "Approve and
+    # run".
+    - name: Snapshot app token
+      id: app
+      if: >-
+        always() && matrix.shard == 'main'
+        && github.event_name
+        == 'pull_request'
+        && env.HAS_APP == 'true'
+      uses: actions/create-github-app-token@v3
+      # app-id, not the newer client-id: the
+      # pinned actionlint only knows app-id.
+      with:
+        app-id: >-
+          ${{ secrets.SNAPSHOT_APP_ID }}
+        private-key: >-
+          ${{ secrets.SNAPSHOT_APP_KEY }}
+        permission-contents: write
+
     # New screens' images (or all, with the
     # label) go to the PR branch, and this
     # workflow runs again on that commit.
@@ -293,6 +321,8 @@ jobs:
         == 'pull_request'
       env:
         GH_TOKEN: ${{ github.token }}
+        APP_TOKEN: >-
+          ${{ steps.app.outputs.token }}
         BRANCH: ${{ github.head_ref }}
         PR: ${{ github.event.number }}
       run: .github/scripts/save-snapshots.sh

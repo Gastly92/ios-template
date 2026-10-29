@@ -40,7 +40,7 @@ let package = Package(
     // updates come as PRs that CI tests.
     .package(
       url: "https://github.com/pointfreeco/swift-snapshot-testing",
-      exact: "1.19.6"
+      exact: "1.19.7"
     ),
   ],
   targets: [

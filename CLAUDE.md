@@ -226,18 +226,21 @@ uploading) runs in CI.
   Images live in
   `SampleTests/__Snapshots__/`. CI records
   missing ones and commits them to the PR
-  branch (pull before pushing again) and
-  starts CI on it. GitHub also holds a
-  duplicate run for the bot's push
-  ("Approve and run"; `action_required`
-  in `actions_list`): it needs no
-  approval, and its box goes away with the
-  next push. Look at the images, then push
-  the next real change. Deleting images
-  re-records them too. After an intended
-  visual change, add the
-  `record-snapshots` label to the PR to
-  record all of them again; a failed
+  branch (pull before pushing again),
+  pushing with the snapshot app's token so
+  CI runs on the new commit
+  (`docs/SNAPSHOT-APP.md`). Without the
+  app's secrets (e.g. Dependabot PRs) it
+  pushes with CI's own token and starts
+  the run itself; GitHub then also holds a
+  duplicate behind "Approve and run"
+  (`action_required` in `actions_list`),
+  which needs no approval. Look at the
+  images, then push the next real change.
+  Deleting images re-records them too.
+  After an intended visual change, add
+  the `record-snapshots` label to the PR
+  to record all of them again; a failed
   comparison uploads `snapshot-diffs`.
   Re-record after Xcode, iOS or snapshot
   library updates.

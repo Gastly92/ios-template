@@ -11,11 +11,15 @@ an app must change to update.
   publishing (`pages.yml`); the scripts;
   the SwiftLint rules and version.
 - The Base package: `Base` (view helpers,
-  `\.now`, notifications), `BaseTesting`
+  `\.now`, notifications and
+  `RecordingNotifier`), `BaseTesting`
   (UI test helpers, `LocalizationCheck`,
-  `RecordingNotifier`, `PrivacyManifest`)
-  and `BaseSnapshots` (`Looks`,
-  `AppStoreShots`).
+  `PrivacyManifest`) and `BaseSnapshots`
+  (`Looks`, `AppStoreShots`). `Base` is a
+  dynamic library, so an app and its unit
+  tests share one copy: a test's `\.now`
+  reaches the app's views, and `is`
+  checks on Base types match.
 - The starter app: saved items
   (SwiftData, versioned schema, store
   error screen, sample data), settings

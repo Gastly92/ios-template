@@ -5,10 +5,10 @@
 # to the PR branch, removes the label, and
 # starts CI on the new commit (a push made by
 # CI doesn't start workflows by itself).
-# GitHub also makes a run for the bot's push
-# that waits for "Approve and run"; it's a
-# duplicate, so a PR comment links the real
-# run and says so.
+# GitHub also holds a run for the bot's
+# push at "Approve and run": a duplicate
+# that needs no approval, and its box goes
+# away with the next push.
 # Needs BRANCH, PR, GH_TOKEN and WORKFLOW
 # (the workflow file to run again).
 set -euo pipefail
@@ -46,22 +46,5 @@ git push -q origin "HEAD:$BRANCH"
 
 gh pr edit "$PR" \
   --remove-label record-snapshots || true
-started=$(gh workflow run "$WORKFLOW" \
-  --ref "$BRANCH" 2>&1)
-echo "$started"
-run=$(grep -o 'https://[^ ]*' \
-  <<<"$started" | head -1)
-# A file, not $(cat <<MD): macOS's bash 3.2
-# misreads a quote in a heredoc inside $().
-note=$(mktemp)
-cat > "$note" <<MD
-Recorded snapshot images and pushed them.
-CI runs again here: ${run:-see Actions}.
-
-No need to tap **Approve and run**: that
-run is a duplicate GitHub holds for the
-bot's push.
-MD
-gh pr comment "$PR" --body-file "$note" \
-  || true
+gh workflow run "$WORKFLOW" --ref "$BRANCH"
 echo "Pushed the images; CI runs again."

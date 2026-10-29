@@ -14,14 +14,6 @@ its scheme and source folder, with
   or Mac. Everything that needs a Mac
   (building, testing, signing, uploading)
   runs in CI.
-- Keep it simple: few steps, few questions.
-  Pick sensible defaults and say what you
-  chose.
-- Explain anything done by hand as short
-  numbered steps for iPhone Safari.
-  App Store Connect's mobile layout can
-  hide buttons; Safari's Find on page
-  helps.
 
 ## The template
 - Each app pins a template version (a tag,
@@ -233,14 +225,15 @@ its scheme and source folder, with
   live in `<App>Tests/__Snapshots__/`. CI
   records missing ones and commits them to
   the PR branch (pull before pushing
-  again), starts CI on it, and comments
-  with the run's link. GitHub also holds a
-  duplicate run for the bot's push
-  ("Approve and run"; `action_required`
-  in `actions_list`): it needs no
-  approval. Look at the images, then
-  push the next real change. Deleting
-  images re-records them too. After an
+  again) and starts CI on it. GitHub also
+  holds a duplicate run for the bot's
+  push ("Approve and run";
+  `action_required` in `actions_list`):
+  it needs no approval, and its box goes
+  away with the next push. Look at the
+  images, then push the next real
+  change. Deleting images re-records them
+  too. After an
   intended visual change, add the
   `record-snapshots` label to the PR to
   record all of them again; a failed

@@ -27,8 +27,4 @@ an app must change to update.
 - New apps: "Use this template", then
   Claude runs `scripts/setup-app.sh`;
   `docs/NEW-APP.md` has the steps, GitHub
-  settings and TestFlight included. After
-  recording snapshots, CI comments with
-  the new run's link (the "Approve and
-  run" box GitHub shows for the bot's
-  push is a duplicate).
+  settings and TestFlight included.

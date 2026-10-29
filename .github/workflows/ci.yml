@@ -462,7 +462,10 @@ jobs:
     - test
     - coverage
     - release
-    if: always()
+    # Not on a run cancelled by a newer
+    # push: a failed Gate there looked like
+    # a real failure. The newer run reports.
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     steps:
     - name: Check results

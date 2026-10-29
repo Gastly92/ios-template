@@ -20,11 +20,14 @@ updates:
     schedule:
       interval: weekly
     # Old images tagged by Swift version
-    # (e.g. 5.5-0.48.0) look newer than
-    # 0.65.1 but aren't.
+    # (5.5-0.47.0, 5.5-0.47.1, 5.5-0.48.0,
+    # 5.5-latest, from 2022) look newer
+    # than 0.65.1 but aren't. The range
+    # skips only those (and any real
+    # 5.5.x release, if one ever comes).
     ignore:
       - dependency-name: realm/swiftlint
-        versions: [">= 5"]
+        versions: [">= 5.5, < 5.6"]
   - package-ecosystem: swift
     directory: /Packages/Base
     schedule:

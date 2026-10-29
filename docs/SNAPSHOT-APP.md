@@ -37,9 +37,17 @@ then add each repo to it.
 ## Adding a repo
 1. Open github.com/settings/apps, tap the
    app, and note its **App ID**.
-2. **Install App** → the gear by your
-   account → **Only select
-   repositories** → add the repo → **Save**.
+2. Give the app access to the repo:
+   - The first time: on the app's page,
+     **Install App** → **Install** → **Only
+     select repositories** → pick the repo
+     → **Install**.
+   - Once it's installed: open
+     github.com/settings/installations,
+     tap **Configure** next to the app,
+     and under **Repository access** →
+     **Select repositories**, add the repo,
+     then tap **Save**.
 3. Back on the app's page, under **Private
    keys**, tap **Generate a private key**
    (a `.pem` file downloads). Each repo

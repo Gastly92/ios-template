@@ -1,4 +1,3 @@
-import BaseSnapshots
 @testable import Sample
 import XCTest
 

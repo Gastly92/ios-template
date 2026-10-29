@@ -1,4 +1,3 @@
-import Base
 @testable import Sample
 import UserNotifications
 import XCTest

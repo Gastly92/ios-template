@@ -51,7 +51,7 @@ First, protect the main branch:
      merging** (required approvals: 0).
    - **Require status checks to pass** →
      **Add checks** → type `Gate` and pick
-     **CI / Gate**.
+     **CI Gate**.
 5. Tap **Create**.
 
 Every change to `main` then goes through a
@@ -161,17 +161,16 @@ hook says so):
    good app name. Ask in one line what the
    app is for.
 2. On a new branch, run
-   `scripts/setup-app.sh QuestLog`. It
-   replaces the template's files with the
-   app (the sample renamed, pinned to the
-   newest template version) and fetches
-   the template into `.template/`.
+   `.github/scripts/setup-app.sh QuestLog`.
+   It renames the sample to the app,
+   removes what only the template needs,
+   and draws an icon from the name's first
+   letter.
 3. Fill in CLAUDE.md's "This app" section
    and the support page (`site/`) with
-   what the app is for. setup-app.sh drew
-   an icon from the name's first letter;
-   offer to redraw it (`app-icon.sh`).
-   Run `.template/scripts/swiftlint.sh`,
+   what the app is for. Offer to redraw
+   the icon (`app-icon.sh`). Run
+   `.github/scripts/swiftlint.sh`,
    commit, push and open a PR. CI records
    the starting snapshots in a bot commit
    (no need to approve the duplicate run).

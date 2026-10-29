@@ -1,9 +1,9 @@
 import XCTest
 
 /// The app under test.
-public typealias App = XCUIApplication
+typealias App = XCUIApplication
 
-public extension XCUIApplication {
+extension XCUIApplication {
   /// Launches the app for a UI test with
   /// `-uiTesting` (the app turns off
   /// animations), and `-seedData` when
@@ -27,7 +27,7 @@ public extension XCUIApplication {
   /// `ScreenID` and `ScreenHost`).
   @MainActor
   static func start(
-    screen: some RawRepresentable<String>,
+    screen: ScreenID,
     arguments: [String] = []
   ) -> XCUIApplication {
     let show = [
@@ -48,12 +48,6 @@ public extension XCUIApplication {
     buttons[id]
   }
 
-  /// A text field, by identifier.
-  @MainActor
-  func field(_ id: String) -> XCUIElement {
-    textFields[id]
-  }
-
   /// A navigation bar, by title.
   @MainActor
   func bar(_ id: String) -> XCUIElement {
@@ -61,7 +55,7 @@ public extension XCUIApplication {
   }
 }
 
-public extension XCUIElement {
+extension XCUIElement {
   /// Waits up to `seconds` for the element
   /// to exist.
   @MainActor
@@ -79,8 +73,4 @@ public extension XCUIElement {
   ) -> Bool {
     waitForNonExistence(timeout: seconds)
   }
-
-  /// A text field's current text.
-  @MainActor
-  var textValue: String? { value as? String }
 }

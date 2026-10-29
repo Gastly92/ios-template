@@ -1,10 +1,9 @@
 # Dependabot opens a PR when a newer version
-# of something the template depends on is
-# out: the GitHub Actions the shared
-# workflows use, SwiftLint, and the Swift
-# packages Base uses. Weekly, grouped so it
-# stays quiet. Apps get these through a new
-# template version.
+# of something the app depends on is out:
+# the GitHub Actions the workflows use,
+# SwiftLint, and the test-only Swift
+# packages. Weekly, grouped so it stays
+# quiet.
 version: 2
 updates:
   - package-ecosystem: github-actions
@@ -16,7 +15,7 @@ updates:
         patterns: ["*"]
   # SwiftLint, pinned in this Dockerfile.
   - package-ecosystem: docker
-    directory: /swiftlint
+    directory: /.github/swiftlint
     schedule:
       interval: weekly
     # Old images tagged by Swift version
@@ -29,7 +28,7 @@ updates:
       - dependency-name: realm/swiftlint
         versions: [">= 5.5, < 5.6"]
   - package-ecosystem: swift
-    directory: /Packages/Base
+    directory: /Packages/TestSupport
     schedule:
       interval: weekly
     groups:

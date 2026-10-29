@@ -9,8 +9,7 @@
 # push at "Approve and run": a duplicate
 # that needs no approval, and its box goes
 # away with the next push.
-# Needs BRANCH, PR, GH_TOKEN and WORKFLOW
-# (the workflow file to run again).
+# Needs BRANCH, PR and GH_TOKEN.
 set -euo pipefail
 
 app=$(sed -n 's/^name: *//p' project.yml)
@@ -46,5 +45,5 @@ git push -q origin "HEAD:$BRANCH"
 
 gh pr edit "$PR" \
   --remove-label record-snapshots || true
-gh workflow run "$WORKFLOW" --ref "$BRANCH"
+gh workflow run ios-build.yml --ref "$BRANCH"
 echo "Pushed the images; CI runs again."

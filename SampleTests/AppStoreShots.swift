@@ -1,10 +1,10 @@
-import SnapshotTesting
 import SwiftUI
+import TestSupport
 import XCTest
 
 /// One App Store screenshot: a screen of the
 /// app with a caption over it.
-public struct Shot {
+struct Shot {
   let name: String
   let caption: String
   let dark: Bool
@@ -15,7 +15,7 @@ public struct Shot {
   /// `name`, in dark mode if `dark`.
   /// Captions are short phrases that add to
   /// the picture.
-  public init(
+  init(
     name: String,
     caption: String,
     view: some View,
@@ -37,7 +37,7 @@ public struct Shot {
 /// snapshots; the images in
 /// `__Snapshots__/` are the ones to upload.
 @MainActor
-public enum AppStoreShots {
+enum AppStoreShots {
   /// An iPhone size App Store Connect takes,
   /// in pixels, and what's added to the
   /// file name.
@@ -79,7 +79,7 @@ public enum AppStoreShots {
   /// background gradient of `colors` (top
   /// to bottom), and checks each saved file
   /// is a size App Store Connect takes.
-  public static func check(
+  static func check(
     _ shots: [Shot],
     colors: [Color],
     fileID: StaticString = #fileID,

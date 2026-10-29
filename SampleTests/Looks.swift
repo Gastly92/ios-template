@@ -1,7 +1,5 @@
-// Tests importing BaseSnapshots get
-// SnapshotTesting too.
-@_exported import SnapshotTesting
 import SwiftUI
+import TestSupport
 
 /// Pictures of a screen in light mode, dark
 /// mode and large text, compared with the
@@ -15,7 +13,7 @@ import SwiftUI
 /// colors there (offscreen, small titles
 /// came out white on white).
 @MainActor
-public enum Looks {
+enum Looks {
   /// An iPhone 13-sized screen.
   private static let phone =
     SwiftUISnapshotLayout.device(
@@ -81,7 +79,7 @@ public enum Looks {
   /// `counter-dark`). The source location
   /// arguments place the images next to the
   /// calling test.
-  public static func check(
+  static func check(
     _ view: some View,
     named name: String,
     fileID: StaticString = #fileID,

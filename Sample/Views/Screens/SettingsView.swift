@@ -1,4 +1,3 @@
-import Base
 import SwiftUI
 
 /// The daily reminder: a switch, and its

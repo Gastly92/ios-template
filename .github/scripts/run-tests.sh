@@ -167,7 +167,7 @@ fi
 
 # Each test's result and errors, and any
 # long-press retried after a stall (see
-# `menuItem` in BaseTesting).
+# `menuItem` in the UI tests).
 shown='Test Case .*(passed|failed)'
 shown+='|error:|\*\* TEST'
 shown+='|Long-press read as a tap'

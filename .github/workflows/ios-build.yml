@@ -1,22 +1,33 @@
-name: Shared CI
+name: iOS Build
 
-# The CI every app runs. An app's own
-# workflow (build.yml) calls this one at a
-# pinned version; see RULES.md. Each job
-# checks out the app, then the template at
-# that same version in .template/ (its
-# scripts, SwiftLint rules and Base
-# package). The app is the `name:` in its
-# project.yml.
+# The app is the `name:` in project.yml.
 on:
-  workflow_call:
+  push:
+    branches: [main]
+  pull_request:
+    # `labeled`: adding the record-snapshots
+    # label records every snapshot again.
+    types:
+    - opened
+    - synchronize
+    - reopened
+    - labeled
+  workflow_dispatch:
+
+concurrency:
+  group: ios-build-${{ github.ref }}
+  cancel-in-progress: true
+
+# Jobs that need more (the test job commits
+# recorded snapshot images) say so.
+permissions:
+  contents: read
 
 # Steps sit at the same indent as `steps:`
 # (valid YAML), so lines fit in 45.
 jobs:
   # Decides whether the PR touches anything
-  # that affects the app, and finds the
-  # template's version.
+  # that affects the app.
   changes:
     name: Detect changes
     runs-on: ubuntu-latest
@@ -28,38 +39,9 @@ jobs:
         'pull_request' ||
         steps.filter.outputs.code ==
         'true' }}
-      repo: ${{ steps.source.outputs.repo }}
-      sha: ${{ steps.source.outputs.sha }}
     steps:
-    # This workflow's own repo and commit
-    # (job.workflow_*). Read from the whole
-    # context: actionlint doesn't know those
-    # fields yet.
-    - name: Find the template
-      id: source
-      env:
-        JOB: ${{ toJSON(job) }}
-      run: |
-        field() {
-          jq -r ".workflow_$1 // empty" \
-            <<<"$JOB"
-        }
-        repo=$(field repository)
-        sha=$(field sha)
-        if [ -z "$repo" ] || [ -z "$sha" ]
-        then
-          echo "::error::No workflow" \
-            "repository or commit in the" \
-            "job context."
-          exit 1
-        fi
-        echo "Template: $repo at $sha"
-        {
-          echo "repo=$repo"
-          echo "sha=$sha"
-        } >> "$GITHUB_OUTPUT"
-
-    # Anything but docs counts.
+    # Anything but docs counts, so new code
+    # paths never need adding here.
     - uses: dorny/paths-filter@v4
       id: filter
       if: github.event_name == 'pull_request'
@@ -77,35 +59,23 @@ jobs:
   # Runs on every PR, docs-only ones too.
   lines:
     name: Line length
-    needs: changes
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7
-    # The template, at the commit this
-    # workflow runs from.
-    - &template
-      uses: actions/checkout@v7
-      with:
-        repository: >-
-          ${{ needs.changes.outputs.repo }}
-        ref: ${{ needs.changes.outputs.sha }}
-        path: .template
 
     - name: Check line length
-      run: .template/scripts/check-lines.py
+      run: .github/scripts/check-lines.py
 
   # Every String Catalog key is still used
   # by some Swift string.
   strings:
     name: String catalog
-    needs: changes
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7
-    - *template
 
     - name: Check for unused keys
-      run: .template/scripts/check-strings.py
+      run: .github/scripts/check-strings.py
 
   # Static checks for the workflows
   # (actionlint) and shell scripts
@@ -114,18 +84,16 @@ jobs:
   # Pinned; same versions run locally.
   scripts:
     name: Workflows & scripts
-    needs: changes
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7
-    - *template
 
     - name: Install checkers
       run: |
         venv="$RUNNER_TEMP/venv"
         python3 -m venv "$venv"
         "$venv/bin/pip" install -q \
-          -r .template/scripts/checkers.txt
+          -r .github/scripts/checkers.txt
         echo "$venv/bin" >> "$GITHUB_PATH"
 
     # Every shell script in the repo.
@@ -146,13 +114,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7
-    - *template
 
     # The same script Claude runs before
-    # pushing; the version is pinned in the
-    # template's swiftlint/Dockerfile.
+    # pushing; the version is pinned in
+    # .github/swiftlint/Dockerfile.
     - name: Lint
-      run: .template/scripts/swiftlint.sh
+      run: .github/scripts/swiftlint.sh
 
   # Every screen must be in the screen list
   # (ScreenID / ScreenHost), so snapshot
@@ -164,10 +131,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7
-    - *template
 
     - name: Check every screen is listed
-      run: .template/scripts/check-screens.sh
+      run: .github/scripts/check-screens.sh
 
   # Builds the app and tests once, for the
   # test shards below.
@@ -179,7 +145,6 @@ jobs:
     timeout-minutes: 20
     steps:
     - uses: actions/checkout@v7
-    - *template
 
     - name: Show toolchain
       run: xcodebuild -version
@@ -201,11 +166,8 @@ jobs:
         xcode=$(
           xcodebuild -version | head -1
         )
-        deps=(project.yml .template/Packages)
-        if [ -d Packages ]; then
-          deps+=(Packages)
-        fi
-        sum=$(find "${deps[@]}" -type f \
+        sum=$(find project.yml Packages \
+          -type f \
           | sort | xargs cat | shasum \
           | cut -c1-12)
         prefix="build-${xcode// /-}-$sum"
@@ -223,7 +185,7 @@ jobs:
 
     - name: Build
       run: >-
-        .template/scripts/run-tests.sh
+        .github/scripts/run-tests.sh
         build
 
     - uses: actions/cache/save@v6
@@ -249,8 +211,7 @@ jobs:
 
     # Unused code (functions, properties,
     # types). Reuses the build's index, while
-    # the tests run. Public code is the Base
-    # package's, used by other apps.
+    # the tests run.
     - name: Periphery
       run: |
         brew install periphery
@@ -265,7 +226,6 @@ jobs:
           --index-store-path \
           "$index/DataStore" \
           --retain-swift-ui-previews \
-          --retain-public \
           --relative-results \
           --format github-actions \
           --strict
@@ -275,7 +235,7 @@ jobs:
   # simulator each). See run-tests.sh.
   test:
     name: Test (${{ matrix.shard }})
-    needs: [changes, build]
+    needs: build
     runs-on: macos-26
     timeout-minutes: 25
     strategy:
@@ -290,14 +250,13 @@ jobs:
       pull-requests: write
     steps:
     - uses: actions/checkout@v7
-    - *template
 
     - name: Boot the simulator
       # Takes seconds; a hung runner sat
       # here until the job's limit.
       timeout-minutes: 5
       run: >-
-        .template/scripts/run-tests.sh
+        .github/scripts/run-tests.sh
         boot
 
     - uses: actions/download-artifact@v8
@@ -320,14 +279,13 @@ jobs:
           && github.event.label.name
           == 'record-snapshots' }}
       run: >-
-        .template/scripts/run-tests.sh test
+        .github/scripts/run-tests.sh test
         ${{ matrix.shard }}
 
     # New screens' images (or all, with the
-    # label) go to the PR branch, and the
-    # app's workflow runs again on that
-    # commit. Snapshot tests are in the main
-    # shard.
+    # label) go to the PR branch, and this
+    # workflow runs again on that commit.
+    # Snapshot tests are in the main shard.
     - name: Save snapshot images
       if: >-
         always() && matrix.shard == 'main'
@@ -337,11 +295,7 @@ jobs:
         GH_TOKEN: ${{ github.token }}
         BRANCH: ${{ github.head_ref }}
         PR: ${{ github.event.number }}
-        REF: ${{ github.workflow_ref }}
-      run: |
-        file="${REF%%@*}"
-        export WORKFLOW="${file##*/}"
-        .template/scripts/save-snapshots.sh
+      run: .github/scripts/save-snapshots.sh
 
     # On a mismatch: the reference, the new
     # image and their difference.
@@ -372,12 +326,11 @@ jobs:
   # shard's tests.
   coverage:
     name: Coverage
-    needs: [changes, test]
+    needs: test
     runs-on: macos-26
     timeout-minutes: 10
     steps:
     - uses: actions/checkout@v7
-    - *template
 
     - uses: actions/download-artifact@v8
       with:
@@ -399,7 +352,7 @@ jobs:
 
     - name: Coverage gate
       run: >-
-        .template/scripts/coverage.sh
+        .github/scripts/coverage.sh
         merged.xcresult
 
     # The localization shard opens every
@@ -409,7 +362,7 @@ jobs:
     - name: Screen list gate
       if: always()
       run: >-
-        .template/scripts/unpictured.sh
+        .github/scripts/unpictured.sh
         result-localization/build/test.xcresult
 
   # The Release build for a real iPhone, in
@@ -424,7 +377,6 @@ jobs:
     timeout-minutes: 20
     steps:
     - uses: actions/checkout@v7
-    - *template
 
     - name: Install XcodeGen
       run: brew install xcodegen
@@ -450,7 +402,7 @@ jobs:
   # always reports, passing when the build
   # was skipped (docs-only PR) or succeeded.
   gate:
-    name: Gate
+    name: CI Gate
     needs:
     - changes
     - lines

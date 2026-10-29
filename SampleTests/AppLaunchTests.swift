@@ -1,4 +1,3 @@
-import Base
 @testable import Sample
 import SwiftData
 import XCTest
@@ -21,8 +20,6 @@ final class AppLaunchTests: XCTestCase {
     let normal = launch([])
     XCTAssertFalse(normal.isUITesting)
     XCTAssertEqual(normal.screen, .items)
-    // `is` matches only if the app and this
-    // test bundle share one copy of Base.
     XCTAssertTrue(
       normal.notifier is PhoneNotifier
     )

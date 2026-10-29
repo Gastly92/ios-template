@@ -4,7 +4,7 @@ private struct NowKey: EnvironmentKey {
   static var defaultValue: Date { Date() }
 }
 
-public extension EnvironmentValues {
+extension EnvironmentValues {
   /// The moment screens treat as now (which
   /// day is "today"). Snapshot tests fix it
   /// so dates on screen don't change day to

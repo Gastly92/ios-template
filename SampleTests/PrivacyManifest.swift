@@ -5,9 +5,9 @@ import Foundation
 /// app, so a unit test can keep it true to
 /// what the app does. The App Store requires
 /// one in every app.
-public struct PrivacyManifest {
+struct PrivacyManifest {
   /// Why reading the manifest failed.
-  public enum Problem: Error {
+  enum Problem: Error {
     /// The app has no manifest.
     case missing
     /// The file isn't a property list.
@@ -15,19 +15,19 @@ public struct PrivacyManifest {
   }
 
   /// Whether the app tracks people.
-  public let tracks: Bool
+  let tracks: Bool
   /// How many kinds of data the app
   /// collects.
-  public let collectedTypes: Int
+  let collectedTypes: Int
   /// Each API category Apple requires a
   /// reason for (e.g. UserDefaults' long
   /// key), with the reasons given (e.g.
   /// `CA92.1`).
-  public let reasons: [String: [String]]
+  let reasons: [String: [String]]
 
   /// Reads the manifest from `bundle`: the
   /// app, in a unit test hosted by it.
-  public init(
+  init(
     bundle: Bundle = .main
   ) throws {
     guard let url = bundle.url(

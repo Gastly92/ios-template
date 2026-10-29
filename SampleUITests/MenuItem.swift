@@ -1,6 +1,6 @@
 import XCTest
 
-public extension XCUIApplication {
+extension XCUIApplication {
   /// Presses after the first, at most, each
   /// only when the one before was read as a
   /// tap.
@@ -70,19 +70,6 @@ public extension XCUIApplication {
     }
   }
 
-  /// A sheet a tap opens, by its title,
-  /// closed with its `close` button.
-  @MainActor
-  func sheet(
-    _ title: String,
-    close: String
-  ) -> Tapped {
-    let done = button(close)
-    return Tapped(opens: bar(title)) {
-      done.tap()
-    }
-  }
-
   /// Whether `item` is in the menu. The
   /// screen a tap opens can have a button
   /// with the same label, so it counts only
@@ -97,25 +84,15 @@ public extension XCUIApplication {
 }
 
 /// How a test presses an element.
-public typealias Press = @MainActor (
+typealias Press = @MainActor (
   XCUIElement
 ) -> Void
 
 /// What a press opens if the app reads it as
 /// a tap, and how to close it again.
-public struct Tapped {
+struct Tapped {
   /// What the tap opens.
-  public let opens: XCUIElement
+  let opens: XCUIElement
   /// Closes it again.
-  public let close: @MainActor () -> Void
-
-  /// What a tap `opens`, and how to `close`
-  /// it.
-  public init(
-    opens: XCUIElement,
-    close: @escaping @MainActor () -> Void
-  ) {
-    self.opens = opens
-    self.close = close
-  }
+  let close: @MainActor () -> Void
 }

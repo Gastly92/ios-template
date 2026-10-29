@@ -1,4 +1,3 @@
-import BaseTesting
 import XCTest
 
 /// The App Store requires a privacy

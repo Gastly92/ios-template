@@ -185,3 +185,8 @@ hook says so):
    secrets' values. Then trigger the
    TestFlight workflow and check the log
    for "Upload succeeded".
+   No app made from the template has
+   uploaded to TestFlight yet: watch the
+   first run closely, and once it works,
+   remove this note (here and in the
+   template).

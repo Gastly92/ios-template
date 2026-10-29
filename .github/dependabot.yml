@@ -4,12 +4,16 @@
 # SwiftLint, and the test-only Swift
 # packages. Weekly, grouped so it stays
 # quiet.
+# Each PR is assigned to the user: GitHub
+# emails assignees, but a bot's PR alone
+# only notifies those watching the repo.
 version: 2
 updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
+    assignees: [Gastly92]
     groups:
       actions:
         patterns: ["*"]
@@ -18,6 +22,7 @@ updates:
     directory: /.github/swiftlint
     schedule:
       interval: weekly
+    assignees: [Gastly92]
     # Old images tagged by Swift version
     # (5.5-0.47.0, 5.5-0.47.1, 5.5-0.48.0,
     # 5.5-latest, from 2022) look newer
@@ -31,6 +36,7 @@ updates:
     directory: /Packages/TestSupport
     schedule:
       interval: weekly
+    assignees: [Gastly92]
     groups:
       swift:
         patterns: ["*"]

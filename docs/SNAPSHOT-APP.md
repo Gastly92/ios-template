@@ -35,25 +35,27 @@ then add each repo to it.
    App**.
 
 ## Adding a repo
-1. Open github.com/settings/apps, tap the
-   app, and note its **App ID**.
-2. Give the app access to the repo:
-   - The first time: on the app's page,
-     **Install App** → **Install** → **Only
-     select repositories** → pick the repo
-     → **Install**.
+1. Give the app access to the repo:
+   - The first time: on the app's page
+     (github.com/settings/apps → the
+     app), **Install App** → **Install** →
+     **Only select repositories** → pick
+     the repo → **Install**.
    - Once it's installed: open
      github.com/settings/installations,
      tap **Configure** next to the app,
      and under **Repository access** →
      **Select repositories**, add the repo,
      then tap **Save**.
-3. Back on the app's page, under **Private
-   keys**, tap **Generate a private key**
-   (a `.pem` file downloads). Each repo
-   gets its own key, so one can be
-   deleted without touching the others.
-4. In the repo: Settings → Secrets and
+2. On the app's page
+   (github.com/settings/apps → the app →
+   **General**), note its **App ID**,
+   then under **Private keys** tap
+   **Generate a private key** (a `.pem`
+   file downloads). Each repo gets its own
+   key, so one can be deleted without
+   touching the others.
+3. In the repo: Settings → Secrets and
    variables → Actions → New repository
    secret:
    - `SNAPSHOT_APP_ID`: the App ID.
@@ -61,7 +63,7 @@ then add each repo to it.
      the `.pem` file (in Files, rename it to
      end in `.txt` to open it), including
      the `-----BEGIN` and `-----END` lines.
-5. Delete the `.pem` file from Files.
+4. Delete the `.pem` file from Files.
 
 If a key is ever lost or leaked, generate
 a new one on the app's page, update that

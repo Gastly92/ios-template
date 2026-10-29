@@ -1,17 +1,16 @@
-import BaseTesting
 import XCTest
 
 final class ItemsTests: XCTestCase {
   /// The list, with the sample items.
   @MainActor
   private func list() -> App {
-    App.start(screen: ScreenID.items)
+    App.start(screen: .items)
   }
 
   @MainActor
   func testAddsAnItem() {
     let app = App.start(
-      screen: ScreenID.itemsEmpty
+      screen: .itemsEmpty
     )
     app.button("Add").tap()
     let added = app.button("New item")

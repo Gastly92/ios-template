@@ -1,20 +1,35 @@
-name: Shared Pages
+name: Pages
 
-# Publishes an app's site/ (its App Store
-# support and privacy pages) to GitHub
-# Pages, at
+# Publishes site/ (the App Store support
+# and privacy pages) to GitHub Pages, at
 # https://<owner>.github.io/<repo>/ and
-# .../privacy.html. An app's own pages.yml
-# calls this one at a pinned version, on
-# every push to main that changes site/.
-# Needs Settings → Pages → Source set to
-# "GitHub Actions" once (docs/NEW-APP.md).
+# .../privacy.html, on each push to main
+# that changes them. Needs Settings → Pages
+# → Source set to "GitHub Actions" once
+# (docs/NEW-APP.md).
 on:
-  workflow_call:
+  push:
+    branches: [main]
+    paths:
+      - site/**
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
 
 jobs:
   deploy:
     name: Publish
+    # Not in the template itself: its pages
+    # are only the starting point for an
+    # app's.
+    if: >-
+      !endsWith(github.repository,
+      '/ios-template')
     runs-on: ubuntu-latest
     permissions:
       contents: read

@@ -1,8 +1,6 @@
 #!/bin/bash
 # Runs SwiftLint in Docker, with the version
-# pinned in the template's
-# swiftlint/Dockerfile, on the repo it's run
-# from (an app, or the template itself).
+# pinned in .github/swiftlint/Dockerfile.
 # CI's SwiftLint job runs this too, so a
 # clean run here means a clean run there.
 # Starts the Docker daemon if it isn't
@@ -12,20 +10,8 @@
 set -euo pipefail
 
 root="$(git rev-parse --show-toplevel)"
-here="$(cd "$(dirname "$0")" && pwd)"
-pin="$here/../swiftlint/Dockerfile"
+pin="$root/.github/swiftlint/Dockerfile"
 image="$(sed -n 's/^FROM //p' "$pin")"
-
-# SwiftLint skips a missing parent config
-# with only a note, which would lint
-# without the shared rules.
-base="$root/.template/swiftlint/base.yml"
-if [ ! -f "$base" ]; then
-  echo "::error::No $base: fetch the" \
-    "template (the session start hook" \
-    "or CI does)."
-  exit 1
-fi
 
 if ! docker info >/dev/null 2>&1; then
   (dockerd >/tmp/dockerd.log 2>&1 &)

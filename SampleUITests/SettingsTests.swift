@@ -1,4 +1,3 @@
-import BaseTesting
 import XCTest
 
 final class SettingsTests: XCTestCase {
@@ -18,7 +17,7 @@ final class SettingsTests: XCTestCase {
   @MainActor
   func testReminderTimeShowsWhenOn() {
     let app = App.start(
-      screen: ScreenID.settings
+      screen: .settings
     )
     let wheel = app.pickerWheels.firstMatch
     XCTAssertFalse(wheel.exists)
@@ -32,11 +31,12 @@ final class SettingsTests: XCTestCase {
   /// reminder on asks for permission. CI's
   /// simulators are new, so it's always the
   /// first time. Other UI tests never see
-  /// the prompt.
+  /// the prompt. Back in the app, the
+  /// reminder is scheduled on the phone.
   @MainActor
   func testAsksForPermission() {
     let app = App.start(
-      screen: ScreenID.settings,
+      screen: .settings,
       arguments: ["-notifications"]
     )
     flip(app)
@@ -48,5 +48,7 @@ final class SettingsTests: XCTestCase {
     XCTAssertTrue(allow.appears(within: 10))
     allow.tap()
     XCTAssertTrue(allow.disappears())
+    let wheel = app.pickerWheels.firstMatch
+    XCTAssertTrue(wheel.appears())
   }
 }

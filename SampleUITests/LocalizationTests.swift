@@ -1,4 +1,3 @@
-import BaseTesting
 import XCTest
 
 /// Every screen's visible text is

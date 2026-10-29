@@ -1,5 +1,5 @@
 # View lines no screen draws, checked by
-# the template's scripts/unpictured.sh.
+# .github/scripts/unpictured.sh.
 # Each ScreenID is opened on its own, so
 # only what a screen shows runs; lines here
 # are expected not to. A file name, then
@@ -29,3 +29,8 @@ SettingsView.swift
 # this case.
 ScreenHost.swift
   StoreErrorView(details: Self.error)
+
+# Set only by snapshot tests, which fix the
+# day.
+Now.swift
+  set { self[NowKey.self] = newValue }

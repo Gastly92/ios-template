@@ -25,7 +25,7 @@ for file in "$screens"/*.swift; do
       "screen but isn't in the screen" \
       "list. Add a ScreenID case for it" \
       "and show it in ScreenHost (see" \
-      "RULES.md)."
+      "CLAUDE.md)."
     missing=1
   done
 done

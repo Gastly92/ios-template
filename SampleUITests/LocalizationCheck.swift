@@ -15,7 +15,7 @@ import XCTest
 /// inside date pickers, and views with
 /// `systemAreaIDs`, e.g. a chart's axes).
 @MainActor
-public struct LocalizationCheck {
+struct LocalizationCheck {
   /// Turns on the pseudo-language.
   static let pseudo = [
     "-NSSurroundLocalizedStrings", "YES",
@@ -32,7 +32,7 @@ public struct LocalizationCheck {
   /// A check letting through the given
   /// identifiers, identifier prefixes,
   /// labels and areas (see above).
-  public init(
+  init(
     systemIDs: Set<String> = [],
     idPrefixes: [String] = [],
     userText: Set<String> = [],
@@ -50,9 +50,7 @@ public struct LocalizationCheck {
   /// element's label and frame took
   /// hundreds of round trips a screen, and
   /// one timed out when CI's runner stalled.
-  public func run<Screen>(
-    _ screens: [Screen]
-  ) where Screen: RawRepresentable<String> {
+  func run(_ screens: [ScreenID]) {
     for screen in screens {
       let name = screen.rawValue
       let app = App.start(

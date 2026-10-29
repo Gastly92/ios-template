@@ -1,18 +1,24 @@
-name: Shared TestFlight
+name: TestFlight
 
-# Archives an app and uploads it to
-# TestFlight. An app's own testflight.yml
-# (run by hand: Actions → TestFlight → Run
-# workflow) calls this one at a pinned
-# version, with `secrets: inherit`. Signing
-# is done by Apple ("cloud signing") using
-# the App Store Connect API key, so no
-# certificates or provisioning profiles are
-# stored in the repo. Needs the repo
-# secrets APPLE_TEAM_ID, ASC_KEY_ID,
-# ASC_ISSUER_ID and ASC_KEY_P8.
+# Archives the app and uploads it to
+# TestFlight. Run by hand (Actions →
+# TestFlight → Run workflow) or by Claude.
+# Signing is done by Apple ("cloud
+# signing") using the App Store Connect API
+# key, so no certificates or provisioning
+# profiles are stored in the repo. Needs
+# the repo secrets APPLE_TEAM_ID,
+# ASC_KEY_ID, ASC_ISSUER_ID and ASC_KEY_P8
+# (docs/NEW-APP.md).
 on:
-  workflow_call:
+  workflow_dispatch:
+
+concurrency:
+  group: testflight
+  cancel-in-progress: false
+
+permissions:
+  contents: read
 
 # Steps sit at the same indent as `steps:`
 # (valid YAML), so lines fit in 45.
@@ -44,35 +50,11 @@ jobs:
         if [ -n "$missing" ]; then
           echo "::error::Missing" \
             "repository secrets:$missing" \
-            "(see the template's" \
-            "docs/NEW-APP.md)"
+            "(see docs/NEW-APP.md)"
           exit 1
         fi
 
     - uses: actions/checkout@v7
-
-    # The template (for its Base package), at
-    # the commit this workflow runs from
-    # (job.workflow_*, read from the whole
-    # context: actionlint doesn't know those
-    # fields yet).
-    - name: Find the template
-      id: source
-      env:
-        JOB: ${{ toJSON(job) }}
-      run: |
-        repo=$(jq -r .workflow_repository \
-          <<<"$JOB")
-        sha=$(jq -r .workflow_sha <<<"$JOB")
-        echo "repo=$repo" >> "$GITHUB_OUTPUT"
-        echo "sha=$sha" >> "$GITHUB_OUTPUT"
-
-    - uses: actions/checkout@v7
-      with:
-        repository: >-
-          ${{ steps.source.outputs.repo }}
-        ref: ${{ steps.source.outputs.sha }}
-        path: .template
 
     - name: Show toolchain
       run: xcodebuild -version

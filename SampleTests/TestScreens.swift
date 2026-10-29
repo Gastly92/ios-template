@@ -1,4 +1,3 @@
-import Base
 @testable import Sample
 import SwiftData
 import SwiftUI

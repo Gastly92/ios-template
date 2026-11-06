@@ -89,11 +89,16 @@ enum Looks {
     column: UInt = #column
   ) {
     for (look, traits, layout) in all {
+      // Nearly every pixel must match:
+      // 0.01% (~130 on a phone) may differ,
+      // as runners now and then draw up to
+      // ~36 pixels a shade off. 1% (0.99)
+      // let a changed date format pass.
       assertSnapshot(
         of: view,
         as: .image(
           drawHierarchyInKeyWindow: true,
-          precision: 0.99,
+          precision: 0.9999,
           perceptualPrecision: 0.98,
           layout: layout,
           traits: traits

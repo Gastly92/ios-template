@@ -143,6 +143,10 @@ jobs:
     if: needs.changes.outputs.code == 'true'
     runs-on: macos-26
     timeout-minutes: 20
+    # A newer iOS than the snapshots' one,
+    # if the runner has it (run-tests.sh).
+    outputs:
+      newer: ${{ steps.build.outputs.newer }}
     steps:
     - uses: actions/checkout@v7
 
@@ -184,6 +188,7 @@ jobs:
           ${{ steps.key.outputs.prefix }}-
 
     - name: Build
+      id: build
       run: >-
         .github/scripts/run-tests.sh
         build
@@ -427,6 +432,64 @@ jobs:
           -derivedDataPath build/device \
           CODE_SIGNING_ALLOWED=NO \
           | tail -n 20
+
+  # On main, when the runner has a newer iOS
+  # than the snapshots: opens a PR moving
+  # them to it (ios-update.sh). Not part of
+  # the gate: it never fails a run.
+  ios-update:
+    name: iOS update
+    needs: build
+    if: >-
+      github.ref == 'refs/heads/main'
+      && github.event_name == 'push'
+      && needs.build.outputs.newer != ''
+    runs-on: ubuntu-latest
+    env:
+      HAS_APP: >-
+        ${{ secrets.SNAPSHOT_APP_KEY != '' }}
+    steps:
+    - name: No snapshot app
+      if: env.HAS_APP != 'true'
+      run: >-
+        echo "::warning::iOS
+        ${{ needs.build.outputs.newer }}
+        is available, but without the
+        snapshot app (docs/SNAPSHOT-APP.md)
+        no PR can be opened for it."
+
+    # The app's token: its PR and label
+    # start CI (CI's own token's don't).
+    - name: Snapshot app token
+      id: app
+      if: env.HAS_APP == 'true'
+      uses: actions/create-github-app-token@v3
+      with:
+        app-id: >-
+          ${{ secrets.SNAPSHOT_APP_ID }}
+        private-key: >-
+          ${{ secrets.SNAPSHOT_APP_KEY }}
+        permission-contents: write
+        permission-pull-requests: write
+
+    - uses: actions/checkout@v7
+      if: env.HAS_APP == 'true'
+      with:
+        token: ${{ steps.app.outputs.token }}
+
+    # A failure (e.g. the app lacks the
+    # pull requests permission) shows on
+    # the step, but doesn't mark main red.
+    - name: Open the PR
+      if: env.HAS_APP == 'true'
+      continue-on-error: true
+      env:
+        GH_TOKEN: >-
+          ${{ steps.app.outputs.token }}
+        NEWER: >-
+          ${{ needs.build.outputs.newer }}
+        OWNER: ${{ github.repository_owner }}
+      run: .github/scripts/ios-update.sh
 
   # Single pass/fail check for a PR. It
   # always reports, passing when the build

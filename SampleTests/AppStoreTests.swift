@@ -21,6 +21,9 @@ final class AppStoreTests: XCTestCase {
   ]
 
   func testScreenshots() throws {
+    guard try SnapshotOS.matches() else {
+      return
+    }
     let list = try TestScreens.page(.items)
     let settings = try TestScreens.page(
       .settingsOn

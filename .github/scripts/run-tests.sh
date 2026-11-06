@@ -24,23 +24,112 @@ set -euo pipefail
 mode="${1:?boot, build or test}"
 app=$(sed -n 's/^name: *//p' project.yml)
 
-# The first available iPhone simulator.
+# Always this iPhone, on the iOS the
+# snapshots were drawn on (saved in
+# __Snapshots__/iOS.txt), so every run
+# draws on the same iOS: GitHub rolls new
+# runner images out over days, and "the
+# newest iOS" would differ between runs.
+# Recording every image (RECORD_ALL) uses
+# the newest iOS, which the snapshot tests
+# then save. A newer iOS than the saved one
+# only adds a warning (and, on main, opens
+# a PR to move to it: ios-update.sh);
+# without the saved one, the newest is used
+# and the snapshot tests fail, saying to
+# record again. Recording for an iOS newer
+# than the runner has (that PR, on a runner
+# the new image hasn't reached) fails
+# rather than record on an older iOS.
+model="iPhone 17"
+saved="${app}Tests/__Snapshots__/iOS.txt"
 pick() {
-  local devices query
+  local runtimes devices id version udid
+  local list want newest chosen
+  runtimes=$(
+    xcrun simctl list runtimes available -j
+  )
   devices=$(
     xcrun simctl list devices available -j
   )
-  query='[.devices | to_entries[]
-    | select(.key | contains("iOS"))
-    | .value[]
-    | select(.name | startswith("iPhone"))
-    ][0].udid // empty'
-  device=$(jq -r "$query" <<<"$devices")
-  if [ -z "$device" ]; then
-    echo "::error::No iPhone simulator found"
+  # "<version> <udid>" for each iOS with
+  # the model, oldest first.
+  list=$(
+    jq -r '.runtimes[]
+      | select(.identifier
+        | contains("SimRuntime.iOS-"))
+      | "\(.identifier) \(.version)"' \
+      <<<"$runtimes" \
+    | while read -r id version; do
+      udid=$(RID=$id MODEL=$model jq -r \
+        'first(.devices[env.RID][]?
+          | select(.name == env.MODEL)
+          | .udid) // empty' \
+        <<<"$devices")
+      if [ -n "$udid" ]; then
+        echo "$version $udid"
+      fi
+    done | sort -V
+  )
+  if [ -z "$list" ]; then
+    echo "::error::No $model simulator"
     exit 1
   fi
-  echo "Using simulator $device"
+  newest=$(tail -n 1 <<<"$list")
+  want=$(cat "$saved" 2>/dev/null || true)
+  chosen=$newest
+  if [ "${RECORD_ALL:-false}" = true ] \
+    && [ -n "$want" ] \
+    && [ "$want" != "${newest% *}" ] \
+    && [ "$(printf '%s\n' "$want" \
+      "${newest% *}" | sort -V \
+      | tail -n 1)" = "$want" ]; then
+    echo "::error::iOS $want isn't on" \
+      "this runner yet (newest: iOS" \
+      "${newest% *}); GitHub is still" \
+      "rolling out the image that has it." \
+      "Re-run the failed jobs later."
+    exit 1
+  fi
+  if [ "${RECORD_ALL:-false}" != true ] \
+    && [ -n "$want" ]; then
+    # As text: as numbers, 26.10 == 26.1.
+    chosen=$(awk -v want="$want" \
+      '($1 "") == (want "")' <<<"$list")
+    if [ -z "$chosen" ]; then
+      chosen=$newest
+      note "iOS $want, the snapshots' iOS," \
+        "isn't on this runner; using iOS" \
+        "${newest% *}. Snapshot tests will" \
+        "fail: add the record-snapshots" \
+        "label to record them again."
+    elif [ "$chosen" != "$newest" ]; then
+      note "iOS ${newest% *} is available;" \
+        "the snapshots use iOS $want. To" \
+        "move to it, add the" \
+        "record-snapshots label."
+      # For the build job's output (the
+      # main branch opens a PR for it).
+      if [ "$mode" = build ] \
+        && [ -n "${GITHUB_OUTPUT:-}" ]; then
+        echo "newer=${newest% *}" \
+          >> "$GITHUB_OUTPUT"
+      fi
+    fi
+  fi
+  device=${chosen#* }
+  echo "Using $model on iOS ${chosen% *}" \
+    "($device)"
+}
+
+# A warning on the PR, once a run (from the
+# build step).
+note() {
+  if [ "$mode" = build ]; then
+    echo "::warning::$*"
+  else
+    echo "$*"
+  fi
 }
 pick
 

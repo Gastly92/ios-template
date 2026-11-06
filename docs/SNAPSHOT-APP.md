@@ -29,7 +29,10 @@ then add each repo to it.
    your GitHub profile.
 3. Webhook: untick **Active**.
 4. Repository permissions → **Contents**:
-   **Read and write**. Leave the rest.
+   **Read and write**, and **Pull
+   requests**: **Read and write** (to open
+   the iOS update PRs,
+   docs/IOS-UPDATES.md). Leave the rest.
 5. Where can it be installed: **Only on
    this account**. Tap **Create GitHub
    App**.
@@ -64,6 +67,16 @@ then add each repo to it.
      end in `.txt` to open it), including
      the `-----BEGIN` and `-----END` lines.
 4. Delete the `.pem` file from Files.
+
+## Adding a permission later
+On the app's page (github.com/settings/apps
+→ the app → **Permissions & events**),
+change the permission and tap **Save
+changes**. Then open
+github.com/settings/installations, tap
+**Configure** next to the app and accept
+the new permissions: until then, the app's
+tokens don't have them.
 
 If a key is ever lost or leaked, make a
 new one (**Credentials** → **Key pairs**

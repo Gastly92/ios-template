@@ -95,6 +95,15 @@ schemes:
         Sample: all
     test:
       gatherCoverageData: true
+      # US English and UTC for unit and
+      # snapshot tests, whatever the
+      # simulator is set to (UI tests pass
+      # the same: `App.start`).
+      commandLineArguments:
+        "-AppleLanguages (en)": true
+        "-AppleLocale en_US": true
+      environmentVariables:
+        TZ: UTC
       coverageTargets:
         - Sample
       targets:

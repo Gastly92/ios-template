@@ -242,8 +242,34 @@ uploading) runs in CI.
   the `record-snapshots` label to the PR
   to record all of them again; a failed
   comparison uploads `snapshot-diffs`.
+  `precision: 0.9999` lets only 0.01% of
+  pixels differ (~130 on a phone image):
+  runners now and then draw up to ~36 a
+  shade off, so 1 and 0.99999 were
+  flaky. Don't loosen it further: at
+  0.99 a changed date format passed.
   Re-record after Xcode, iOS or snapshot
   library updates.
+  CI tests on iPhone 17 with the iOS the
+  images were drawn on, saved in
+  `__Snapshots__/iOS.txt` (`run-tests.sh`
+  logs which), so every run matches even
+  while GitHub rolls out a new runner
+  image. `record-snapshots` draws on the
+  newest iOS and saves it; so does the
+  first run without the file (a new app).
+  A newer iOS on the runner only warns on
+  the PR: move to it by adding
+  `record-snapshots`. If the saved iOS is
+  gone, the snapshot tests fail and say
+  to record again (iOS draws system
+  controls, e.g. the date picker's
+  format). On `main`, a newer iOS opens a
+  PR moving to it, assigned to the owner
+  (`docs/IOS-UPDATES.md`). Tests run in
+  US English and UTC whatever the
+  simulator's settings (`project.yml`
+  scheme, `App.start`).
 - Test-only Swift packages are declared in
   `Packages/TestSupport/Package.swift`
   (pinned with `exact:`), which tests

@@ -7,6 +7,9 @@ import XCTest
 @MainActor
 final class SnapshotTests: XCTestCase {
   func testEveryScreen() throws {
+    guard try SnapshotOS.matches() else {
+      return
+    }
     for screen in ScreenID.allCases {
       let page = try TestScreens.page(screen)
       let name = screen.rawValue

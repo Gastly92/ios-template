@@ -4,6 +4,16 @@ import XCTest
 typealias App = XCUIApplication
 
 extension XCUIApplication {
+  /// US English and UTC, whatever the
+  /// simulator is set to, so dates and
+  /// numbers read the same on every runner
+  /// (the scheme sets the same for unit and
+  /// snapshot tests in `project.yml`).
+  static let fixedRegion = [
+    "-AppleLanguages", "(en)",
+    "-AppleLocale", "en_US",
+  ]
+
   /// Launches the app for a UI test with
   /// `-uiTesting` (the app turns off
   /// animations), and `-seedData` when
@@ -16,8 +26,9 @@ extension XCUIApplication {
     let app = XCUIApplication()
     let seed = seeded
       ? ["-seedData"] : []
-    app.launchArguments =
-      ["-uiTesting"] + seed + arguments
+    app.launchArguments = ["-uiTesting"]
+      + fixedRegion + seed + arguments
+    app.launchEnvironment["TZ"] = "UTC"
     app.launch()
     return app
   }

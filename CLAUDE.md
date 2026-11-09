@@ -137,8 +137,10 @@ uploading) runs in CI.
   CI's `Line length` job runs
   `check-lines.py` (it skips URLs, single
   unbreakable words, Markdown tables and
-  code blocks, and `uses:` lines). Indent
-  with 2 spaces. To fit:
+  code blocks, and `uses:` lines). It
+  reads only files git tracks, so `git
+  add` new files before running it.
+  Indent with 2 spaces. To fit:
   - Prefer short, clear names; a long line
     often means a name could be shorter.
   - Pull deeply nested view code into a
@@ -169,7 +171,14 @@ uploading) runs in CI.
   the ways around that check
   (`@unchecked Sendable`,
   `nonisolated(unsafe)`,
-  `@preconcurrency`).
+  `@preconcurrency`). A handler for
+  notifications Apple posts from
+  background threads (Core Data,
+  CloudKit) is `@Sendable` and hops to
+  the main actor itself (`Task {
+  @MainActor in … }`): a main-actor
+  handler compiles but crashes when the
+  post comes from another thread.
 - Coverage gate (`coverage.sh`): every line
   of the app must run in tests (unit,
   snapshot and UI tests all count); the
@@ -178,8 +187,18 @@ uploading) runs in CI.
   `Models/` or `Support/` and unit test
   them. Pass in outside pieces (store,
   clock, notifications) so tests can fake
-  them. Every button and branch in a view
-  needs a UI test or snapshot that
+  them. For an Apple class tests can't
+  fake (e.g. `CKContainer`), declare a
+  protocol with only the methods used,
+  conform the class in an empty extension
+  (`extension CKContainer: Cloud {}`), and
+  pass fakes in tests. An Apple object
+  tests can't make (e.g. a CloudKit
+  event): read its fields by key-value
+  coding, so a test can post an
+  `NSObject` with the same `@objc`
+  properties. Every button and branch in
+  a view needs a UI test or snapshot that
   reaches it; code nothing can reach gets
   deleted. A view using Swift's automatic
   initializer shows its private property
@@ -212,6 +231,13 @@ uploading) runs in CI.
   summary line. One UI test taps first on
   purpose, so the stall path runs every
   time.
+- In `@MainActor` tests, wait with
+  `await fulfillment(of:)`, never
+  `wait(for:)`: it blocks the main actor,
+  so work that needs it never runs. Keep
+  a `ModelContainer` alive as long as any
+  context from it: a context whose
+  container was freed crashes.
 - Read many elements in one accessibility
   snapshot (`app.snapshot()`), not
   element by element: hundreds of separate
@@ -249,7 +275,10 @@ uploading) runs in CI.
   flaky. Don't loosen it further: at
   0.99 a changed date format passed.
   Re-record after Xcode, iOS or snapshot
-  library updates.
+  library updates. Nothing animated on a
+  snapshot screen: a `ProgressView`
+  spinner draws a different frame each
+  run, so use a still image there.
   CI tests on iPhone 17 with the iOS the
   images were drawn on, saved in
   `__Snapshots__/iOS.txt` (`run-tests.sh`

@@ -31,6 +31,7 @@ sharing is ported by hand.
 | `site/` | Support and privacy pages |
 | `CLAUDE.md` | How the app is built and tested (for Claude, and the user) |
 | `docs/NEW-APP.md` | Starting a new app, GitHub settings and TestFlight setup |
+| `docs/ICLOUD.md` | Adding iCloud sync, without a Mac |
 
 ## Starting a new app
 

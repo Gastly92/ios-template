@@ -410,9 +410,11 @@ uploading) runs in CI.
   need extra signing setup: a
   `.entitlements` file via `project.yml`,
   the capability enabled on the App ID,
-  and likely changes to the TestFlight
-  workflow (it archives with
-  `CODE_SIGNING_ALLOWED=NO`).
+  and changes to the TestFlight workflow
+  (it archives with
+  `CODE_SIGNING_ALLOWED=NO`). iCloud sync
+  step by step, with what was learned
+  building it: `docs/ICLOUD.md`.
 - Keep the privacy manifest
   (`Sample/PrivacyInfo.xcprivacy`) and
   the privacy page (`site/privacy.html`)

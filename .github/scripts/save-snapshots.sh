@@ -14,17 +14,28 @@ set -euo pipefail
 
 app=$(sed -n 's/^name: *//p' project.yml)
 dir="${app}Tests/__Snapshots__"
-changes=$(git status --porcelain -- "$dir")
-if [ -z "$changes" ]; then
+# Only the images the tests recorded (new
+# or changed). Not the whole folder: the
+# tests ran on the PR merged into main,
+# which can be older than the branch, and
+# copying it all brought back images the
+# branch had just deleted.
+list=$(mktemp)
+{
+  git ls-files -z --others \
+    --exclude-standard -- "$dir"
+  git diff -z --name-only \
+    --diff-filter=M -- "$dir"
+} > "$list"
+if [ ! -s "$list" ]; then
   echo "No new snapshot images."
   exit 0
 fi
-echo "$changes"
+tr '\0' '\n' < "$list"
 
-# The tests ran on the PR merged into main;
-# put the images on the PR branch itself.
+# Put them on the PR branch itself.
 saved=$(mktemp -d)
-cp -R "$dir" "$saved/"
+xargs -0 tar -cf "$saved/new.tar" < "$list"
 # (Undo them here first; the folder may not
 # be in git yet.)
 if [ -n "$(git ls-files -- "$dir")" ]; then
@@ -33,8 +44,7 @@ fi
 git clean -fdq -- "$dir"
 git fetch -q --depth=1 origin "$BRANCH"
 git checkout -q -B "$BRANCH" FETCH_HEAD
-rm -rf "$dir"
-cp -R "$saved/__Snapshots__" "$dir"
+tar -xf "$saved/new.tar"
 
 git config user.name "github-actions[bot]"
 git config user.email \

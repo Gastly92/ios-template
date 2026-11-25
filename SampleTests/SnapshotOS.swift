@@ -33,6 +33,15 @@ enum SnapshotOS {
       contentsOf: file, encoding: .utf8
     )
     guard let saved, mode != "all" else {
+      // A new app has no __Snapshots__
+      // folder until this first run.
+      let folder = file
+        .deletingLastPathComponent()
+      try FileManager.default
+        .createDirectory(
+          at: folder,
+          withIntermediateDirectories: true
+        )
       try "\(now)\n".write(
         to: file,
         atomically: true,

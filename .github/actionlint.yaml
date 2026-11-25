@@ -1,9 +1,10 @@
 # Runner labels newer than the pinned
-# actionlint (checkers.txt) knows.
+# actionlint (checkers/requirements.txt)
+# knows. CI's runner-labels.sh fails once
+# actionlint knows one, so it's dropped.
 # xcode-27: GitHub's Xcode 27 image (macOS
 # 27, Apple Silicon), generally available
-# since 2026-10-15. Drop a label here once
-# actionlint lists it itself.
+# since 2026-10-15.
 self-hosted-runner:
   labels:
     - xcode-27

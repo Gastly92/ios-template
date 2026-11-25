@@ -14,14 +14,41 @@ protocol Notifier: Sendable {
   /// with `requests`.
   func replace(
     with requests: [UNNotificationRequest]
-  )
+  ) async
 }
 
+/// The parts of the phone's notification
+/// center `PhoneNotifier` uses, so unit
+/// tests can pass a stand-in. (UI tests
+/// can't: on iOS 27, XCTest can't see or
+/// answer the permission prompt.)
+@MainActor
+protocol NotificationHub {
+  func requestAuthorization(
+    options: UNAuthorizationOptions
+  ) async throws -> Bool
+  func removeAllPendingNotificationRequests()
+  func add(
+    _ request: UNNotificationRequest
+  ) async throws
+}
+
+extension UNUserNotificationCenter:
+  NotificationHub {}
+
 /// The phone's notification center.
-struct PhoneNotifier: Notifier {
+@MainActor
+final class PhoneNotifier: Notifier {
+  private let hub: any NotificationHub
+
+  init(
+    hub: any NotificationHub =
+      UNUserNotificationCenter.current()
+  ) {
+    self.hub = hub
+  }
+
   func ask() async {
-    let hub = UNUserNotificationCenter
-      .current()
     _ = try? await hub.requestAuthorization(
       options: [.alert, .sound]
     )
@@ -29,13 +56,11 @@ struct PhoneNotifier: Notifier {
 
   func replace(
     with requests: [UNNotificationRequest]
-  ) {
-    let hub = UNUserNotificationCenter
-      .current()
+  ) async {
     hub
       .removeAllPendingNotificationRequests()
     for request in requests {
-      hub.add(request)
+      try? await hub.add(request)
     }
   }
 }

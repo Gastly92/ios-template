@@ -93,7 +93,8 @@ jobs:
         venv="$RUNNER_TEMP/venv"
         python3 -m venv "$venv"
         "$venv/bin/pip" install -q \
-          -r .github/scripts/checkers.txt
+          -r \
+          .github/checkers/requirements.txt
         echo "$venv/bin" >> "$GITHUB_PATH"
 
     # Every shell script in the repo.
@@ -106,6 +107,11 @@ jobs:
     # block.
     - name: actionlint
       run: actionlint
+
+    # Labels actionlint has learned since
+    # they were listed in actionlint.yaml.
+    - name: Runner labels
+      run: .github/scripts/runner-labels.sh
 
   lint:
     name: SwiftLint

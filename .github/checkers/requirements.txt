@@ -2,5 +2,7 @@
 # pinned. CI's `Workflows & scripts` job and
 # the cloud session start hook
 # (session-start.sh) both install these.
+# Dependabot bumps them (a requirements
+# file, so its pip updater reads it).
 shellcheck-py==0.11.0.1
 actionlint-py==1.7.12.25

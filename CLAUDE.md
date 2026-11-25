@@ -311,7 +311,8 @@ uploading) runs in CI.
   (pinned with `exact:`), which tests
   `import TestSupport` to get. Dependabot
   opens weekly PRs for them, and for the
-  GitHub Actions and SwiftLint versions:
+  GitHub Actions, SwiftLint and the
+  workflow checkers' versions:
   check CI and summarize what changed
   (release notes); the user merges. If
   snapshots change, re-record them before
@@ -320,9 +321,14 @@ uploading) runs in CI.
   actionlint on `.github/workflows/` and
   ShellCheck on every `*.sh`. The session
   start hook installs both (versions in
-  `.github/scripts/checkers.txt`), so run
-  them before pushing workflow or script
-  changes.
+  `.github/checkers/requirements.txt`,
+  which Dependabot bumps), so run them
+  before pushing workflow or script
+  changes. Runner labels actionlint
+  doesn't know yet go in
+  `.github/actionlint.yaml`;
+  `runner-labels.sh` fails once it knows
+  one, so the entry gets dropped.
 - Periphery (CI step after the build)
   fails on unused code. Delete it rather
   than ignore it; no `periphery:ignore`
@@ -354,11 +360,15 @@ uploading) runs in CI.
   `SilentNotifier` in UI tests (no
   permission prompt, nothing scheduled),
   and `RecordingNotifier` in unit tests to
-  check what's scheduled. One UI test
-  launches with `-notifications` to see
-  the real permission prompt. What to
-  schedule is decided in `Models/` (e.g.
-  `Reminder`) and unit tested.
+  check what's scheduled. `PhoneNotifier`
+  talks to the center through
+  `NotificationHub`, which unit tests fake:
+  on iOS 27, XCTest can't see or answer
+  the permission prompt (SpringBoard
+  hosts it in another process), so no UI
+  test touches it. What to schedule is
+  decided in `Models/` (e.g. `Reminder`)
+  and unit tested.
 - Settings use `@AppStorage` with the
   `UserDefaults` `AppLaunch` passes in (an
   emptied suite in UI tests, set up per

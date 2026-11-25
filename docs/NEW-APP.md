@@ -28,7 +28,7 @@ you through the GitHub settings (step 3)
 one at a time, mostly before opening the
 setup PR, then opens it; the steps are
 here for reference.
-Steps 4–9 (TestFlight) can wait until you
+Steps 4–8 (TestFlight) can wait until you
 want the app on your phone.
 
 ## 3. GitHub settings
@@ -106,81 +106,109 @@ Connect. A Claude Code cloud session
 started under the old name can only push
 through the old name.
 
-## 4. Find your Team ID
-Skip if you have it from an earlier app.
-1. Open developer.apple.com/account and
-   sign in.
-2. Scroll to **Membership details** and
-   copy the **Team ID** (10 characters,
-   like `AB12CD34EF`) into Notes.
-
-## 5. Register the bundle ID
+## 4. Register the bundle ID
 1. Open
-   developer.apple.com/account/resources/identifiers.
+   https://developer.apple.com/account/resources/identifiers/list
 2. Tap **+** → **App IDs** → Continue →
    **App** → Continue.
 3. Description: `QuestLog`. Bundle ID:
    **Explicit**, `com.gastly92.questlog`.
+   Check the spelling: it can never
+   change once the app exists.
 4. Tap Continue → **Register**.
 
-## 6. Create the app in App Store Connect
-1. Open appstoreconnect.apple.com →
-   **Apps** → **+** → **New App**.
+## 5. Create the app in App Store Connect
+1. Open https://appstoreconnect.apple.com/apps
+   and tap **+** → **New App**.
 2. Platform **iOS**; name it (if the name
    is taken, add a word; you can change it
-   later); pick the bundle ID from step 5;
+   later); pick the bundle ID from step 4;
    SKU: `questlog`; **Full Access**.
 3. Tap **Create**.
 
-## 7. Create an API key
+## 6. Create an API key
 GitHub can't copy secrets between repos,
 and Apple lets you download a key only
 once, so each app gets its own key. (That
 also means one app's key can be revoked
 without touching the others.)
-1. In App Store Connect: **Users and
-   Access** → **Integrations** → **App
-   Store Connect API** → **Team Keys** →
-   **+**.
+1. Open
+   https://appstoreconnect.apple.com/access/integrations/api
+   → **Team Keys** → **+**.
 2. Name: the app's name. Access:
    **Admin**. Tap **Generate**.
-3. Copy the **Issuer ID** (above the list;
-   the same for every key) and the new
-   key's **Key ID** into Notes.
-4. Tap **Download** next to the key.
-5. In the **Files** app → Downloads, rename
-   `AuthKey_….p8` to end in `.txt`, open
-   it, and copy all its text (including the
-   `-----BEGIN` and `-----END` lines).
+3. Tap **Download** next to the new key
+   (only once). In the **Files** app →
+   Downloads, rename `AuthKey_….p8` to
+   end in `.txt`.
 
-## 8. Add the four GitHub secrets
-1. Open the repo on github.com →
-   **Settings** → **Secrets and variables**
-   → **Actions**.
-2. Tap **New repository secret** for each:
+Nothing to copy yet: each value is copied
+in step 7, just before it's pasted. Keep
+this page open.
 
-| Name | Value |
-|---|---|
-| `APPLE_TEAM_ID` | Team ID (step 4) |
-| `ASC_ISSUER_ID` | Issuer ID (step 7) |
-| `ASC_KEY_ID` | Key ID (step 7) |
-| `ASC_KEY_P8` | Key text (step 7) |
+## 7. Add the four GitHub secrets
+Add each one at
+`https://github.com/<owner>/<repo>/settings/secrets/actions/new`
+(Settings → Secrets and variables →
+Actions → New repository secret): copy the
+name below, then the value from where it
+says, and tap **Add secret**. Don't paste
+them anywhere else, a chat included.
+
+Name:
+```
+APPLE_TEAM_ID
+```
+Value: the **Team ID**, from
+https://developer.apple.com/account →
+**Membership details** (10 characters,
+like `AB12CD34EF`).
+
+Name:
+```
+ASC_ISSUER_ID
+```
+Value: the **Issuer ID**, above the list
+on the API keys page (step 6; the same
+for every key).
+
+Name:
+```
+ASC_KEY_ID
+```
+Value: the new key's **Key ID**, in its
+row on that page.
+
+Name:
+```
+ASC_KEY_P8
+```
+Value: all the text of the key file
+(step 6), including the `-----BEGIN` and
+`-----END` lines.
 
 Then delete the key file from Files.
 
-## 9. Build and install
-1. In App Store Connect, open the app →
-   **TestFlight** → **Internal Testing** →
-   **+**, name the group `Me`, and add
-   yourself.
-2. Ask Claude to ship to TestFlight (or in
+## 8. Build and install
+1. Ask Claude to ship to TestFlight (or in
    the GitHub app: repo → **Actions** →
    **TestFlight** → **Run workflow**).
-3. About 5 minutes for the run, then 5–15
-   for Apple to process the build. Install
-   it from the **TestFlight** app.
+   About 5 minutes for the run.
+2. Wait for Apple to process the build
+   (5–15 minutes; Apple emails when it's
+   done). TestFlight's **Internal
+   Testing** options only appear once the
+   app has a build.
+3. In App Store Connect
+   (https://appstoreconnect.apple.com/apps),
+   open the app → **TestFlight** →
+   **Internal Testing** → **+**, name the
+   group `Me`, add yourself, and make sure
+   the build is in the group.
+4. Install it from the **TestFlight** app.
 
-Later builds: just step 9.2.
+Later builds: just step 8.1; the group
+gets each new build.
 
 ## Setting up a new repo (for Claude)
 When a repo made with "Use this template"
@@ -225,10 +253,16 @@ hook says so):
    Pages was on, check its publish
    succeeded after the merge.
 7. Ask whether to set up TestFlight now.
-   If so, walk the user through steps 4–9
-   above one at a time, waiting
-   for each to be done; never ask for the
-   secrets' values. Then trigger the
+   If so, walk the user through steps 4–8
+   above one at a time, waiting for each
+   to be done; never ask for the secrets'
+   values. As in the guide: give each
+   page's direct link, ask the user to
+   copy a value only in the step that
+   pastes it, and put every name or value
+   they copy in its own code block (a
+   table cell can't be copied on its
+   own). Then trigger the
    TestFlight workflow and check the log
    for "Upload succeeded".
    No app made from the template has

@@ -190,19 +190,25 @@ Value: all the text of the key file
 Then delete the key file from Files.
 
 ## 8. Build and install
-1. In App Store Connect
+1. Ask Claude to ship to TestFlight (or in
+   the GitHub app: repo → **Actions** →
+   **TestFlight** → **Run workflow**).
+   About 5 minutes for the run.
+2. Wait for Apple to process the build
+   (5–15 minutes; Apple emails when it's
+   done). TestFlight's **Internal
+   Testing** options only appear once the
+   app has a build.
+3. In App Store Connect
    (https://appstoreconnect.apple.com/apps),
    open the app → **TestFlight** →
    **Internal Testing** → **+**, name the
-   group `Me`, and add yourself.
-2. Ask Claude to ship to TestFlight (or in
-   the GitHub app: repo → **Actions** →
-   **TestFlight** → **Run workflow**).
-3. About 5 minutes for the run, then 5–15
-   for Apple to process the build. Install
-   it from the **TestFlight** app.
+   group `Me`, add yourself, and make sure
+   the build is in the group.
+4. Install it from the **TestFlight** app.
 
-Later builds: just step 8.2.
+Later builds: just step 8.1; the group
+gets each new build.
 
 ## Setting up a new repo (for Claude)
 When a repo made with "Use this template"

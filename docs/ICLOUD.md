@@ -17,7 +17,7 @@ then the release docs.
 
 ## 1. Signing (owner, then a PR)
 1. In the developer portal
-   (developer.apple.com/account →
+   (https://developer.apple.com/account →
    Identifiers), open the app's ID and
    tick **iCloud** (with CloudKit) and
    **Push Notifications**. Under iCloud,
@@ -157,7 +157,7 @@ Testing") build can:
    with it, after a restart), open it on
    Wi-Fi for a minute.
 5. In the CloudKit Console
-   (icloud.developer.apple.com, desktop
+   (https://icloud.developer.apple.com, desktop
    site via **aA**), check the record
    types in Development, then **Deploy
    Schema Changes**. Delete the schema

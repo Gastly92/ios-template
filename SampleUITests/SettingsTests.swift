@@ -1,16 +1,15 @@
 import XCTest
 
 final class SettingsTests: XCTestCase {
-  /// The switch, tapped at its right end
-  /// (a tap on the label doesn't flip it).
+  /// The switch itself, inside the
+  /// labelled row (a tap on the label
+  /// doesn't flip it, and the row's right
+  /// end sat only half a point inside the
+  /// switch on iOS 27).
   @MainActor
   private func flip(_ app: App) {
     app.switches["Daily reminder"]
-      .coordinate(
-        withNormalizedOffset: CGVector(
-          dx: 0.95, dy: 0.5
-        )
-      )
+      .switches.firstMatch
       .tap()
   }
 

@@ -394,9 +394,12 @@ uploading) runs in CI.
   TestFlight about 5–15 min later.
 - Version scheme (`MARKETING_VERSION` in
   `project.yml`; Apple allows only three
-  numbers): before 1.0, `0.<step>.0` when
-  a planned step lands, patch for fixes
-  between steps, bumped in the same PR.
+  numbers): a new app starts at 0.0.1.
+  Before 1.0, `0.<step>.0` when a planned
+  step lands, patch for fixes between
+  steps, bumped in the same PR. Never
+  upload 1.0.0 early: App Store Connect
+  won't take a lower version after it.
   1.0.0 is the first App Store release;
   after that, patch for bug fixes, minor
   for new features. Build number =

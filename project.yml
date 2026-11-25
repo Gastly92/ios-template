@@ -11,7 +11,7 @@ options:
   usesTabs: false
 settings:
   base:
-    MARKETING_VERSION: "1.0.0"
+    MARKETING_VERSION: "0.0.1"
     CURRENT_PROJECT_VERSION: "1"
     # Swift 6: data races are compile errors
     # in every target, tests included.

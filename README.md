@@ -40,3 +40,8 @@ a Claude Code session on the new repo, and
 say "Help me set this repo up using the
 template". Details, TestFlight setup
 included: [docs/NEW-APP.md](docs/NEW-APP.md).
+
+An app whose repo already exists (notes, an
+earlier idea) can take the template too:
+in a session on that repo, say "Set this
+repo up from gastly92/ios-template".

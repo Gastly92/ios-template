@@ -385,6 +385,17 @@ uploading) runs in CI.
   `docs/NEW-APP.md`; walk the user through
   them. Never print, log, or ask for the
   secrets.
+- Walking the user through any setup (this
+  guide, the snapshot app, iCloud): in the
+  chat, one step at a time, waiting for
+  each, never only in a PR description.
+  Ask for a one-time setting before the
+  step that would trip over it. Give each
+  page's direct link; ask the user to
+  copy a value only in the step that
+  pastes it; put every name or value to
+  copy in its own code block (a table
+  cell can't be copied alone).
 - When asked to ship or test on the
   phone, trigger it with
   `actions_run_trigger` (`run_workflow`,

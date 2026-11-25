@@ -11,7 +11,7 @@ Its bundle ID is `com.gastly92.questlog`
 
 ## 1. Make the repo from the template
 1. In Safari, open
-   github.com/gastly92/ios-template.
+   https://github.com/gastly92/ios-template
 2. Tap **Use this template** → **Create a
    new repository**. (If it's missing, the
    template's Settings → General →
@@ -205,7 +205,12 @@ Then delete the key file from Files.
    **Internal Testing** → **+**, name the
    group `Me`, add yourself, and make sure
    the build is in the group.
-4. Install it from the **TestFlight** app.
+4. The first time, Apple emails you a
+   TestFlight invitation: open its link on
+   the iPhone to accept it (the build may
+   not show in the TestFlight app until
+   you do). Then install it from the
+   **TestFlight** app.
 
 Later builds: just step 8.1; the group
 gets each new build.
@@ -262,11 +267,62 @@ hook says so):
    pastes it, and put every name or value
    they copy in its own code block (a
    table cell can't be copied on its
-   own). Then trigger the
-   TestFlight workflow and check the log
-   for "Upload succeeded".
-   No app made from the template has
-   uploaded to TestFlight yet: watch the
-   first run closely, and once it works,
-   remove this note (here and in the
-   template).
+   own). Then trigger the TestFlight
+   workflow, check the log for "Upload
+   succeeded", and walk the user through
+   the group and the invitation (step 8)
+   once Apple has processed the build.
+
+## Into an existing repo (for Claude)
+When the app's repo already exists (notes,
+an earlier idea) instead of coming from
+"Use this template":
+1. On a new branch, copy the template's
+   files in with `git archive` from a
+   clone of `gastly92/ios-template`, and
+   commit them unchanged, so the next
+   commit's renaming reads on its own.
+2. Run `setup-app.sh` as above; it works
+   the same on a copied-in template.
+3. Every tracked `*.md` file must fit the
+   45-character lines (CI's `Line
+   length`), the repo's own notes
+   included. Rewrap them first, words
+   unchanged, ideally in a PR of their
+   own before the setup PR.
+4. Then carry on from step 3 of "Setting
+   up a new repo" above.
+
+## Replacing the sample (for Claude)
+The app's first real PR usually swaps the
+sample (items, reminders, settings) for
+the app's own first screen. Keep the
+pipeline (`ScreenID`, `ScreenHost`,
+`AppLaunch`, the snapshot, App Store and
+localization tests) and remove the rest
+cleanly, since CI fails on leftovers:
+- **Unused code** (Periphery): delete the
+  sample's models, stores, notifier, seed
+  data and screens, their tests, and test
+  helpers only they used (`menuItem`, some
+  `App` helpers). A test helper that stops
+  throwing needs its callers' `try`s
+  removed (warnings are errors).
+- **Snapshots**: delete the sample's
+  images but keep `__Snapshots__/iOS.txt`;
+  CI records the new ones.
+- **String catalog**: delete keys only the
+  sample used.
+- **`.github/unpictured.txt`**: remove
+  entries for deleted views.
+- **Privacy**: without `@AppStorage`, drop
+  the `UserDefaults` reason from the
+  manifest, `PrivacyInfoTests` and
+  `site/privacy.html`.
+- **CLAUDE.md and `site/`**: drop what
+  described the sample, and say where to
+  get each piece back from the template
+  (SwiftData, notifications, settings,
+  long-press) when the app needs it.
+- **Version**: the first TestFlight build
+  is 0.0.1.

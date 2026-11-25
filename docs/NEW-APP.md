@@ -23,19 +23,60 @@ Its bundle ID is `com.gastly92.questlog`
 ## 2. Ask Claude
 Start a Claude Code session on the new repo
 and send: "Help me set this repo up using
-the template." Claude sets up the app in a
-PR, then walks you through the steps below
-one at a time; they're here for reference.
+the template." Claude sets up the app, walks
+you through the GitHub settings (step 3)
+one at a time, mostly before opening the
+setup PR, then opens it; the steps are
+here for reference.
 Steps 4–9 (TestFlight) can wait until you
 want the app on your phone.
 
 ## 3. GitHub settings
 GitHub doesn't copy a template's settings,
-so each new repo needs these once. Do them
-after the setup PR's CI has run (its
-check only shows in the list after that).
+so each new repo needs these once. Do the
+first three before the setup PR is pushed:
+they don't need CI, and missing them shows
+up on that PR (an "Approve and run" button,
+a failed Pages publish when it merges). The
+last needs the setup PR's CI to have run
+once: its check only shows in the list
+after that.
 
-First, protect the main branch:
+First, so snapshot images CI records start
+CI by themselves (no "Approve and run"):
+install the snapshot app on the repo and
+add its two secrets
+([SNAPSHOT-APP.md](SNAPSHOT-APP.md)).
+Without it CI still works, but every
+recording holds a run behind "Approve and
+run" (it needs no approval).
+
+Then have merged PRs' branches deleted and
+allow auto-merge:
+1. **Settings** → **General** → the **Pull
+   Requests** section (Find on page:
+   "delete head").
+2. Tick **Automatically delete head
+   branches** and **Allow auto-merge**
+   (each saves at once). Auto-merge lets
+   a PR merge by itself once CI passes.
+
+Then turn on the support pages (the App
+Store asks for a support and a privacy
+policy link):
+1. **Settings** → **Pages** → Source:
+   **GitHub Actions**.
+2. Once the setup PR is merged, the pages
+   are at `https://gastly92.github.io/quest-log/`
+   and `.../privacy.html` (your repo's
+   name in place of `quest-log`). If
+   Pages was off when it merged, the
+   publish failed: run it once by hand
+   (**Actions** → **Pages** → **Run
+   workflow**).
+
+Last, once the setup PR's CI has run,
+protect the main branch:
 1. Open the repo on github.com →
    **Settings** → **Rules** → **Rulesets**
    → **New ruleset** → **New branch
@@ -57,32 +98,13 @@ First, protect the main branch:
 Every change to `main` then goes through a
 PR, and a PR merges only when CI passes.
 
-Then, in the same place, have merged PRs'
-branches deleted and allow auto-merge:
-1. **Settings** → **General** → the **Pull
-   Requests** section (Find on page:
-   "delete head").
-2. Tick **Automatically delete head
-   branches** and **Allow auto-merge**
-   (each saves at once). Auto-merge lets
-   a PR merge by itself once CI passes.
-
-Then turn on the support pages (the App
-Store asks for a support and a privacy
-policy link):
-1. **Settings** → **Pages** → Source:
-   **GitHub Actions**.
-2. Once the setup PR is merged, the pages
-   are at `https://gastly92.github.io/quest-log/`
-   and `.../privacy.html` (your repo's
-   name in place of `quest-log`).
-
-Last, so snapshot images CI records start
-CI by themselves (no "Approve and run"):
-install the snapshot app on the repo and
-add its two secrets
-([SNAPSHOT-APP.md](SNAPSHOT-APP.md)).
-Optional: without it CI still works.
+Renaming the repo later: GitHub redirects
+the old name, but the support pages move
+to the new one, so update the issue links
+in `site/` and the URLs in App Store
+Connect. A Claude Code cloud session
+started under the old name can only push
+through the old name.
 
 ## 4. Find your Team ID
 Skip if you have it from an earlier app.
@@ -180,16 +202,29 @@ hook says so):
    and the support page (`site/`) with
    what the app is for. Offer to redraw
    the icon (`app-icon.sh`). Run
-   `.github/scripts/swiftlint.sh`,
-   commit, push and open a PR. CI records
-   the starting snapshots in a bot commit
-   (no need to approve the duplicate run).
-   Get CI green; the user merges.
-4. Walk the user through step 3 (branch
-   rules, branch deletion and auto-merge,
-   Pages and the snapshot app); it's
-   needed once CI has run.
-5. Ask whether to set up TestFlight now.
+   `.github/scripts/swiftlint.sh` and
+   commit.
+4. Before pushing, walk the user through
+   the first three parts of step 3 (the
+   snapshot app, branch deletion and
+   auto-merge, Pages) in the chat, one at
+   a time, waiting for each to be done.
+   Listing them in the PR description is
+   not walking through them. If the user
+   would rather wait, say what skipping
+   each costs, and carry on.
+5. Push and open a PR. CI records the
+   starting snapshots in a bot commit
+   (with the snapshot app, its push
+   starts CI; without it, the duplicate
+   run held behind "Approve and run"
+   needs no approval). Get CI green.
+6. Once CI has run, walk the user through
+   the main-branch ruleset (the last part
+   of step 3), then the user merges. If
+   Pages was on, check its publish
+   succeeded after the merge.
+7. Ask whether to set up TestFlight now.
    If so, walk the user through steps 4–9
    above one at a time, waiting
    for each to be done; never ask for the

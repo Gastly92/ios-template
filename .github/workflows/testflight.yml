@@ -25,7 +25,7 @@ permissions:
 jobs:
   upload:
     name: Build & upload to TestFlight
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 45
     # Write access to push the build's tag.
     permissions:

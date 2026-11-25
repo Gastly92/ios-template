@@ -40,7 +40,14 @@ uploading) runs in CI.
   compiler.
 - `.github/workflows/ios-build.yml` runs
   on every PR and push to `main` (macOS
-  runner). It generates the project and
+  runners: GitHub's `xcode-27` image, as
+  App Store Connect refuses builds from
+  an older SDK from April 2027; for the
+  next Xcode, change every `runs-on` in
+  both workflows, list the label in
+  `.github/actionlint.yaml` if actionlint
+  doesn't know it, and re-record the
+  snapshots). It generates the project and
   builds the tests once, then runs them in
   two shards on separate runners in
   parallel (`.github/scripts/run-tests.sh`;

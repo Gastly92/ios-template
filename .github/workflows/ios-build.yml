@@ -141,7 +141,7 @@ jobs:
     name: Build for testing
     needs: changes
     if: needs.changes.outputs.code == 'true'
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 20
     # A newer iOS than the snapshots' one,
     # if the runner has it (run-tests.sh).
@@ -241,7 +241,7 @@ jobs:
   test:
     name: Test (${{ matrix.shard }})
     needs: build
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 25
     strategy:
       fail-fast: false
@@ -362,7 +362,7 @@ jobs:
   coverage:
     name: Coverage
     needs: test
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 10
     steps:
     - uses: actions/checkout@v7
@@ -408,7 +408,7 @@ jobs:
     name: Release build
     needs: changes
     if: needs.changes.outputs.code == 'true'
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 20
     steps:
     - uses: actions/checkout@v7

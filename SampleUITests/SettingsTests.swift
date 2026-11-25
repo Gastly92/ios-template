@@ -56,12 +56,46 @@ final class SettingsTests: XCTestCase {
       arguments: ["-notifications"]
     )
     flip(app)
+    save(app, as: "after-flip")
     app.bar("Settings").tap()
+    save(app, as: "after-tap")
     await fulfillment(
       of: [allowed],
       timeout: 10
     )
     let wheel = app.pickerWheels.firstMatch
     XCTAssertTrue(wheel.appears())
+  }
+
+  /// For now, while the iOS 27 prompt is
+  /// looked into: saves the screen where CI
+  /// uploads `snapshot-diffs`, and logs
+  /// what SpringBoard shows.
+  @MainActor
+  private func save(
+    _ app: App,
+    as name: String
+  ) {
+    let folder = URL(filePath: #filePath)
+      .deletingLastPathComponent()
+      .deletingLastPathComponent()
+      .appending(path: "build")
+      .appending(path: "snapshot-diffs")
+    try? FileManager.default
+      .createDirectory(
+        at: folder,
+        withIntermediateDirectories: true
+      )
+    let png = XCUIScreen.main.screenshot()
+      .pngRepresentation
+    let file = folder
+      .appending(path: "\(name).png")
+    try? png.write(to: file)
+    let board = App(
+      bundleIdentifier:
+        "com.apple.springboard"
+    )
+    print(name, board.debugDescription)
+    print(name, app.debugDescription)
   }
 }

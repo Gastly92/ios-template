@@ -88,6 +88,7 @@ enum AppStoreShots {
     line: UInt = #line,
     column: UInt = #column
   ) throws {
+    warmUp(shots[0], colors: colors)
     for shot in shots {
       for phone in phones {
         let name = shot.name + phone.suffix
@@ -112,6 +113,29 @@ enum AppStoreShots {
         )
       }
     }
+  }
+
+  /// Draws `shot` once and throws it away.
+  /// On CI's GPU-less runners the first
+  /// poster builds its shaders (over a
+  /// second) and sometimes timed out,
+  /// coming out all black. It checks
+  /// nothing: `assertSnapshot` does.
+  private static func warmUp(
+    _ shot: Shot,
+    colors: [Color]
+  ) {
+    let page = Page(
+      shot: shot,
+      colors: colors
+    )
+    let drawn = XCTestExpectation()
+    let draw = poster(phones[0]).snapshot
+    draw(page).run { _ in drawn.fulfill() }
+    _ = XCTWaiter().wait(
+      for: [drawn],
+      timeout: 5
+    )
   }
 
   /// `style`, standard text, 3x, sRGB.

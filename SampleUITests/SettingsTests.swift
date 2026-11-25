@@ -31,23 +31,36 @@ final class SettingsTests: XCTestCase {
   /// reminder on asks for permission. CI's
   /// simulators are new, so it's always the
   /// first time. Other UI tests never see
-  /// the prompt. Back in the app, the
-  /// reminder is scheduled on the phone.
+  /// the prompt.
+  /// On iOS 27 SpringBoard no longer shows
+  /// the prompt's buttons to a query, so an
+  /// interruption monitor answers it: XCTest
+  /// calls it when the test next acts on the
+  /// app with a system alert in the way.
   @MainActor
-  func testAsksForPermission() {
+  func testAsksForPermission() async {
+    let allowed = expectation(
+      description: "Allow tapped"
+    )
+    addUIInterruptionMonitor(
+      withDescription: "Notifications"
+    ) { alert in
+      MainActor.assumeIsolated {
+        alert.buttons["Allow"].tap()
+      }
+      allowed.fulfill()
+      return true
+    }
     let app = App.start(
       screen: .settings,
       arguments: ["-notifications"]
     )
     flip(app)
-    let springboard = App(
-      bundleIdentifier:
-        "com.apple.springboard"
+    app.bar("Settings").tap()
+    await fulfillment(
+      of: [allowed],
+      timeout: 10
     )
-    let allow = springboard.buttons["Allow"]
-    XCTAssertTrue(allow.appears(within: 10))
-    allow.tap()
-    XCTAssertTrue(allow.disappears())
     let wheel = app.pickerWheels.firstMatch
     XCTAssertTrue(wheel.appears())
   }

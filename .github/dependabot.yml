@@ -1,7 +1,8 @@
 # Dependabot opens a PR when a newer version
 # of something the app depends on is out:
 # the GitHub Actions the workflows use,
-# SwiftLint, and the test-only Swift
+# SwiftLint, the workflow and script
+# checkers, and the test-only Swift
 # packages. Weekly, grouped so it stays
 # quiet.
 # Each PR is assigned to the user: GitHub
@@ -32,6 +33,15 @@ updates:
     ignore:
       - dependency-name: realm/swiftlint
         versions: [">= 5.5, < 5.6"]
+  # actionlint and ShellCheck.
+  - package-ecosystem: pip
+    directory: /.github/checkers
+    schedule:
+      interval: weekly
+    assignees: [Gastly92]
+    groups:
+      checkers:
+        patterns: ["*"]
   - package-ecosystem: swift
     directory: /Packages/TestSupport
     schedule:

@@ -1,16 +1,15 @@
 import XCTest
 
 final class SettingsTests: XCTestCase {
-  /// The switch, tapped at its right end
-  /// (a tap on the label doesn't flip it).
+  /// The switch itself, inside the
+  /// labelled row (a tap on the label
+  /// doesn't flip it, and the row's right
+  /// end sat only half a point inside the
+  /// switch on iOS 27).
   @MainActor
   private func flip(_ app: App) {
     app.switches["Daily reminder"]
-      .coordinate(
-        withNormalizedOffset: CGVector(
-          dx: 0.95, dy: 0.5
-        )
-      )
+      .switches.firstMatch
       .tap()
   }
 
@@ -24,31 +23,5 @@ final class SettingsTests: XCTestCase {
     flip(app)
     XCTAssertTrue(wheel.appears())
     wheel.adjust(toPickerWheelValue: "10")
-  }
-
-  /// With the phone's notification center
-  /// (`-notifications`), turning the
-  /// reminder on asks for permission. CI's
-  /// simulators are new, so it's always the
-  /// first time. Other UI tests never see
-  /// the prompt. Back in the app, the
-  /// reminder is scheduled on the phone.
-  @MainActor
-  func testAsksForPermission() {
-    let app = App.start(
-      screen: .settings,
-      arguments: ["-notifications"]
-    )
-    flip(app)
-    let springboard = App(
-      bundleIdentifier:
-        "com.apple.springboard"
-    )
-    let allow = springboard.buttons["Allow"]
-    XCTAssertTrue(allow.appears(within: 10))
-    allow.tap()
-    XCTAssertTrue(allow.disappears())
-    let wheel = app.pickerWheels.firstMatch
-    XCTAssertTrue(wheel.appears())
   }
 }

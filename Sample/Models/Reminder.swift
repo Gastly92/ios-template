@@ -44,7 +44,7 @@ struct Reminder: Equatable {
     if isOn {
       await notifier.ask()
     }
-    notifier.replace(with: requests)
+    await notifier.replace(with: requests)
   }
 
   /// `minutes` on `day` as a date, for a

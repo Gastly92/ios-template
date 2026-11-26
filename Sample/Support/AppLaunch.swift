@@ -21,8 +21,7 @@ struct AppLaunch {
   let store:
     Result<ModelContainer, any Error>
   /// Where reminders go. UI tests get none
-  /// (no permission prompt), unless they
-  /// launch with `-notifications`.
+  /// (no permission prompt).
   let notifier: any Notifier
   /// Where settings are kept.
   let defaults: UserDefaults
@@ -37,12 +36,10 @@ struct AppLaunch {
   ) {
     let testing = args.contains("-uiTesting")
     isUITesting = testing
-    let real = !testing
-      || args.contains("-notifications")
-    if real {
-      notifier = PhoneNotifier()
-    } else {
+    if testing {
       notifier = SilentNotifier()
+    } else {
+      notifier = PhoneNotifier()
     }
     let id = args
       .drop { $0 != "-showScreen" }

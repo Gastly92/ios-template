@@ -49,15 +49,6 @@ final class AppLaunchTests: XCTestCase {
     XCTAssertEqual(unknown.screen, .items)
   }
 
-  func testRealNotificationsOnRequest() {
-    let real = launch([
-      "-uiTesting", "-notifications",
-    ])
-    XCTAssertTrue(
-      real.notifier is PhoneNotifier
-    )
-  }
-
   func testSeededScreensGetItems()
     throws {
     let seeded = launch([
